@@ -1,0 +1,18 @@
+# KiCad backups and caches
+*-backups/
+*.lck
+*.lck~
+*.tmp
+*.bak
+fp-info-cache
+
+# Fusion / CAD temporary exports
+*.autosave
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
