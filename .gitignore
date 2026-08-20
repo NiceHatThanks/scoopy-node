@@ -5,7 +5,11 @@
 *.tmp
 *.bak
 fp-info-cache
-
+# Third-party 3D CAD models - not redistributed
+*.step
+*.stp 
+*.glb
+hardware/kicad/scoopy/models/ESP32-C3-SuperMini.kicad_mod
 # Fusion / CAD temporary exports
 *.autosave
 
@@ -16,3 +20,57 @@ Thumbs.db
 # Editor files
 .vscode/
 .idea/
+
+# ============================================================
+# KiCad
+# ============================================================
+
+# Local user/project settings
+*.kicad_prl
+
+# Lock files
+*.lck
+~*.lck
+
+# Autosave files
+_autosave-*
+*.autosave
+
+# Backup files
+*.kicad-bak
+*.bak
+
+# KiCad backup/history directories
+*-backups/
+.history/
+
+# Temporary files
+*.tmp
+
+
+# ============================================================
+# Windows
+# ============================================================
+
+Thumbs.db
+Thumbs.db:encryptable
+Desktop.ini
+$RECYCLE.BIN/
+
+
+# ============================================================
+# macOS
+# ============================================================
+
+.DS_Store
+
+
+# ============================================================
+# Editors
+# ============================================================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
