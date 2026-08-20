@@ -4,7 +4,7 @@ Tiny, local-first smart-home hardware for Home Assistant and ESPHome.
 
 Scoopy Node is a compact USB-C powered room interface built around an ESP32-C3. The first hardware revision combines two physical buttons, three status LEDs, optional mmWave presence sensing, and an I²C expansion connection in a small 3D-printed enclosure.
 
-This repository is the home for the open hardware, enclosure files, ESPHome firmware, manufacturing outputs, and documentation.
+This repository is the home for the open hardware, printable enclosure files, ESPHome firmware, manufacturing outputs, and documentation.
 
 ## Repository structure
 
@@ -16,9 +16,8 @@ hardware/
   schematics/    Schematics and exported PDFs
 
 enclosure/
-  fusion/        Fusion source files
-  step/          Neutral CAD exports
-  stl/           Printable enclosure files
+  stl/           Complete and individual printable STL files
+  3mf/           Slicer-ready project files
 
 firmware/
   esphome/       ESPHome configuration and supporting files
