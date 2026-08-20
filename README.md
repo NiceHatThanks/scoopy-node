@@ -16,8 +16,8 @@ hardware/
   schematics/    Schematics and exported PDFs
 
 enclosure/
-  stl/           Complete and individual printable STL files
-  3mf/           Slicer-ready project files
+  compact/       Printable files for the compact enclosure
+  presence/      Printable files for the mmWave presence enclosure
 
 firmware/
   esphome/       ESPHome configuration and supporting files
@@ -29,6 +29,8 @@ docs/
 
 images/          Product and documentation images
 ```
+
+Each enclosure variant contains STL exports and a location for slicer-ready 3MF projects.
 
 ## Status
 
