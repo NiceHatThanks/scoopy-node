@@ -2,24 +2,43 @@
 
 Printable enclosure files for Scoopy Node.
 
-## Structure
+Scoopy has two enclosure variants:
 
-- `stl/v1/full/` — complete V1 enclosure STL exports
-- `stl/v1/parts/` — individual printable V1 enclosure components
-- `3mf/v1/` — slicer-ready V1 project files when available
+- `compact/` — the smaller enclosure without presence sensing
+- `presence/` — the larger enclosure designed for the mmWave presence version
 
-Fusion source files are intentionally not published. The public enclosure files are focused on making it straightforward to print, replace, or modify individual physical parts.
-
-Keep printable exports grouped by hardware/enclosure revision so a known release can always be reproduced later.
-
-When adding files, use clear names such as:
+Each variant is organised the same way:
 
 ```text
-scoopy-v1-complete.stl
-scoopy-v1-base.stl
-scoopy-v1-lid.stl
-scoopy-v1-button-1.stl
-scoopy-v1-button-2.stl
-scoopy-v1-light-pipes.stl
-scoopy-v1.3mf
+<variant>/
+  stl/
+    v1/
+      full/      complete enclosure STL export
+      parts/     individual printable components
+  3mf/
+    v1/          slicer-ready project files when available
+```
+
+Fusion source files are intentionally not published. The public enclosure files are focused on making it straightforward to print a complete enclosure or replace individual parts.
+
+Keep printable exports grouped by enclosure revision so a known release can always be reproduced later.
+
+Suggested filenames:
+
+```text
+scoopy-compact-v1-complete.stl
+scoopy-compact-v1-base.stl
+scoopy-compact-v1-lid.stl
+scoopy-compact-v1-button-1.stl
+scoopy-compact-v1-button-2.stl
+scoopy-compact-v1-light-pipes.stl
+scoopy-compact-v1.3mf
+
+scoopy-presence-v1-complete.stl
+scoopy-presence-v1-base.stl
+scoopy-presence-v1-lid.stl
+scoopy-presence-v1-button-1.stl
+scoopy-presence-v1-button-2.stl
+scoopy-presence-v1-light-pipes.stl
+scoopy-presence-v1.3mf
 ```
