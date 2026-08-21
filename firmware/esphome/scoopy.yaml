@@ -1,0 +1,767 @@
+# ============================================================
+# Scoopy Node - Unified Firmware
+# ============================================================
+#
+# Hardware:
+#
+#   GPIO0  - LD2410C UART TX
+#   GPIO1  - LD2410C UART RX
+#   GPIO2  - Button 1
+#   GPIO3  - Button 2
+#   GPIO4  - Left green LED
+#   GPIO5  - I2C SDA
+#   GPIO6  - Middle red LED
+#   GPIO7  - I2C SCL
+#   GPIO10 - Right green LED
+#
+# The same firmware is intended for both:
+#
+#   Scoopy Compact
+#   Scoopy Presence
+#
+# If an LD2410C is not fitted, its entities will remain Unknown
+# while the rest of Scoopy continues operating normally.
+#
+# First-time setup:
+#
+#   1. Device creates a Wi-Fi AP named scoopy-XXXXXX
+#   2. Customer connects using password: scoopy123
+#   3. Captive portal is used to enter home Wi-Fi credentials
+#   4. Home Assistant discovers Scoopy through ESPHome
+#
+# Recovery:
+#
+#   Hold both buttons for 10 seconds to factory-reset Wi-Fi
+#   credentials and return Scoopy to setup mode.
+#
+# ============================================================
+
+
+# ============================================================
+# Device identity
+# ============================================================
+
+esphome:
+  name: scoopy
+  friendly_name: Scoopy
+
+  # Adds the final six hexadecimal digits of the ESP32 MAC
+  # address to the device name.
+  #
+  # Example:
+  #   scoopy-2176d8
+  #
+  # This gives every Scoopy a unique identity while allowing
+  # every device to use exactly the same firmware image.
+  name_add_mac_suffix: true
+
+
+# ============================================================
+# ESP32-C3
+# ============================================================
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+
+# ============================================================
+# Logging / Home Assistant / OTA
+# ============================================================
+
+logger:
+
+api:
+
+ota:
+  - platform: esphome
+
+
+# ============================================================
+# Wi-Fi provisioning
+# ============================================================
+
+wifi:
+  id: wifi_component
+
+  # No normal SSID/password is compiled into production
+  # firmware.
+  #
+  # A fresh or factory-reset Scoopy creates its own setup AP.
+  # Because no SSID is explicitly supplied here, ESPHome uses
+  # the MAC-suffixed Scoopy device name.
+  ap:
+    password: "scoopy123"
+
+  # Once Wi-Fi successfully connects, stop using the red LED
+  # as a setup indicator and leave it off ready for normal
+  # Home Assistant control.
+  on_connect:
+    then:
+      - light.turn_off: middle_led
+
+
+# Provides the first-time Wi-Fi setup page.
+captive_portal:
+
+
+# Also allows provisioning over USB serial using Improv.
+improv_serial:
+
+
+# ============================================================
+# LD2410C mmWave radar
+# ============================================================
+
+# UART is always enabled so one firmware image can support
+# both Scoopy Compact and Scoopy Presence.
+#
+# ESP TX -> LD2410 RX
+# ESP RX <- LD2410 TX
+
+uart:
+  id: radar_uart
+  tx_pin: GPIO0
+  rx_pin: GPIO1
+  baud_rate: 256000
+  parity: NONE
+  stop_bits: 1
+
+
+ld2410:
+  id: radar
+  uart_id: radar_uart
+
+
+# ============================================================
+# I2C expansion
+# ============================================================
+
+# Generic I2C expansion bus.
+#
+# Users can add their own ESPHome-supported I2C
+# peripherals without modifying Scoopy hardware.
+
+i2c:
+  id: scoopy_i2c
+  sda: GPIO5
+  scl: GPIO7
+  scan: true
+
+
+# ============================================================
+# LD2410C distance sensors
+# ============================================================
+
+sensor:
+  - platform: ld2410
+    ld2410_id: radar
+
+    # Distance entities can change frequently, so publish them
+    # at most once every five seconds to reduce unnecessary
+    # Home Assistant Recorder/history traffic.
+
+    detection_distance:
+      name: "Presence Distance"
+      filters:
+        - throttle: 5s
+
+    moving_distance:
+      name: "Moving Distance"
+      filters:
+        - throttle: 5s
+
+    still_distance:
+      name: "Still Distance"
+      filters:
+        - throttle: 5s
+
+
+# ============================================================
+# LED PWM outputs
+# ============================================================
+
+# All three LEDs use ESP32 LEDC PWM so Home Assistant can set
+# brightness as well as effects.
+
+output:
+  - platform: ledc
+    pin: GPIO4
+    id: left_led_output
+
+  - platform: ledc
+    pin: GPIO6
+    id: middle_led_output
+
+  - platform: ledc
+    pin: GPIO10
+    id: right_led_output
+
+
+# ============================================================
+# Home Assistant LED entities
+# ============================================================
+
+light:
+
+  # ----------------------------------------------------------
+  # Left green LED
+  # ----------------------------------------------------------
+
+  - platform: monochromatic
+    name: "Left LED"
+    id: left_led
+    output: left_led_output
+    restore_mode: ALWAYS_OFF
+
+    effects:
+      - pulse:
+          name: "Pulse Dim"
+          transition_length: 1s
+          update_interval: 1s
+          min_brightness: 5%
+          max_brightness: 25%
+
+      - pulse:
+          name: "Pulse Mid"
+          transition_length: 1s
+          update_interval: 1s
+          min_brightness: 8%
+          max_brightness: 60%
+
+      - pulse:
+          name: "Pulse Bright"
+          transition_length: 1s
+          update_interval: 1s
+          min_brightness: 10%
+          max_brightness: 100%
+
+      - strobe:
+          name: "Flash Dim"
+          colors:
+            - state: true
+              brightness: 25%
+              duration: 500ms
+            - state: false
+              duration: 500ms
+
+      - strobe:
+          name: "Flash Mid"
+          colors:
+            - state: true
+              brightness: 60%
+              duration: 500ms
+            - state: false
+              duration: 500ms
+
+      - strobe:
+          name: "Flash Bright"
+          colors:
+            - state: true
+              brightness: 100%
+              duration: 500ms
+            - state: false
+              duration: 500ms
+
+      - strobe:
+          name: "Alert"
+          colors:
+            - state: true
+              brightness: 100%
+              duration: 150ms
+            - state: false
+              duration: 150ms
+
+
+  # ----------------------------------------------------------
+  # Middle red LED
+  #
+  # This LED doubles as Scoopy's setup/recovery indicator.
+  # Once Wi-Fi is connected, it behaves as a normal HA light.
+  # ----------------------------------------------------------
+
+  - platform: monochromatic
+    name: "Middle LED"
+    id: middle_led
+    output: middle_led_output
+    restore_mode: ALWAYS_OFF
+
+    effects:
+      - pulse:
+          name: "Pulse Dim"
+          transition_length: 1s
+          update_interval: 1s
+          min_brightness: 5%
+          max_brightness: 25%
+
+      - pulse:
+          name: "Pulse Mid"
+          transition_length: 1s
+          update_interval: 1s
+          min_brightness: 8%
+          max_brightness: 60%
+
+      - pulse:
+          name: "Pulse Bright"
+          transition_length: 1s
+          update_interval: 1s
+          min_brightness: 10%
+          max_brightness: 100%
+
+      - strobe:
+          name: "Flash Dim"
+          colors:
+            - state: true
+              brightness: 25%
+              duration: 500ms
+            - state: false
+              duration: 500ms
+
+      - strobe:
+          name: "Flash Mid"
+          colors:
+            - state: true
+              brightness: 60%
+              duration: 500ms
+            - state: false
+              duration: 500ms
+
+      - strobe:
+          name: "Flash Bright"
+          colors:
+            - state: true
+              brightness: 100%
+              duration: 500ms
+            - state: false
+              duration: 500ms
+
+      - strobe:
+          name: "Alert"
+          colors:
+            - state: true
+              brightness: 100%
+              duration: 150ms
+            - state: false
+              duration: 150ms
+
+
+  # ----------------------------------------------------------
+  # Right green LED
+  # ----------------------------------------------------------
+
+  - platform: monochromatic
+    name: "Right LED"
+    id: right_led
+    output: right_led_output
+    restore_mode: ALWAYS_OFF
+
+    effects:
+      - pulse:
+          name: "Pulse Dim"
+          transition_length: 1s
+          update_interval: 1s
+          min_brightness: 5%
+          max_brightness: 25%
+
+      - pulse:
+          name: "Pulse Mid"
+          transition_length: 1s
+          update_interval: 1s
+          min_brightness: 8%
+          max_brightness: 60%
+
+      - pulse:
+          name: "Pulse Bright"
+          transition_length: 1s
+          update_interval: 1s
+          min_brightness: 10%
+          max_brightness: 100%
+
+      - strobe:
+          name: "Flash Dim"
+          colors:
+            - state: true
+              brightness: 25%
+              duration: 500ms
+            - state: false
+              duration: 500ms
+
+      - strobe:
+          name: "Flash Mid"
+          colors:
+            - state: true
+              brightness: 60%
+              duration: 500ms
+            - state: false
+              duration: 500ms
+
+      - strobe:
+          name: "Flash Bright"
+          colors:
+            - state: true
+              brightness: 100%
+              duration: 500ms
+            - state: false
+              duration: 500ms
+
+      - strobe:
+          name: "Alert"
+          colors:
+            - state: true
+              brightness: 100%
+              duration: 150ms
+            - state: false
+              duration: 150ms
+
+
+# ============================================================
+# Factory reset
+# ============================================================
+
+# Internal ESPHome factory-reset control.
+#
+# It is deliberately hidden from Home Assistant and only
+# invoked by the physical two-button recovery gesture.
+
+button:
+  - platform: factory_reset
+    id: factory_reset_button
+    internal: true
+
+
+# ============================================================
+# Internal state used for setup/reset indication
+# ============================================================
+
+globals:
+
+  # The reset logic runs every 250 ms.
+  #
+  # 40 * 250 ms = 10 seconds.
+  - id: factory_reset_hold_count
+    type: int
+    restore_value: no
+    initial_value: "0"
+
+  # Used to divide the 250 ms status loop down to a slower
+  # setup-mode blink.
+  - id: slow_blink_count
+    type: int
+    restore_value: no
+    initial_value: "0"
+
+
+# ============================================================
+# Status LED + factory reset monitor
+# ============================================================
+
+interval:
+  - interval: 250ms
+    then:
+
+      # ------------------------------------------------------
+      # Track simultaneous button hold
+      # ------------------------------------------------------
+
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_on: button_1
+              - binary_sensor.is_on: button_2
+
+          then:
+            - lambda: |-
+                id(factory_reset_hold_count)++;
+
+          else:
+            - lambda: |-
+                id(factory_reset_hold_count) = 0;
+
+
+      # ------------------------------------------------------
+      # Factory reset warning LED
+      # ------------------------------------------------------
+
+      # During the final three seconds of the reset gesture,
+      # temporarily override the normal middle LED behaviour.
+
+      - if:
+          condition:
+            lambda: |-
+              return id(factory_reset_hold_count) >= 36;
+
+          then:
+            # 9-10 seconds:
+            # very fast warning blink.
+            - light.toggle: middle_led
+
+          else:
+            - if:
+                condition:
+                  lambda: |-
+                    return id(factory_reset_hold_count) >= 28;
+
+                then:
+                  # 7-9 seconds:
+                  # slower warning blink.
+                  - lambda: |-
+                      static bool reset_fast_toggle = false;
+                      reset_fast_toggle = !reset_fast_toggle;
+
+                      if (reset_fast_toggle) {
+                        if (id(middle_led).current_values.is_on()) {
+                          id(middle_led).turn_off().perform();
+                        } else {
+                          id(middle_led).turn_on().perform();
+                        }
+                      }
+
+                else:
+
+                  # ------------------------------------------------
+                  # Setup / Wi-Fi status
+                  # ------------------------------------------------
+
+                  - if:
+                      condition:
+                        wifi.connected:
+
+                      then:
+                        # Once connected, do NOT continually control
+                        # the middle LED here.
+                        #
+                        # Home Assistant is free to use it normally.
+                        - lambda: |-
+                            id(slow_blink_count) = 0;
+
+                      else:
+
+                        - if:
+                            condition:
+                              wifi.ap_active:
+
+                            then:
+                              # Setup AP active:
+                              # slow blink, toggling once per second.
+                              - lambda: |-
+                                  id(slow_blink_count)++;
+
+                                  if (id(slow_blink_count) >= 4) {
+                                    id(slow_blink_count) = 0;
+
+                                    if (id(middle_led).current_values.is_on()) {
+                                      id(middle_led).turn_off().perform();
+                                    } else {
+                                      id(middle_led).turn_on().perform();
+                                    }
+                                  }
+
+                            else:
+                              # Wi-Fi disconnected / attempting
+                              # connection without the setup AP:
+                              # fast blink.
+                              - light.toggle: middle_led
+
+
+      # ------------------------------------------------------
+      # Factory reset after 10 seconds
+      # ------------------------------------------------------
+
+      - if:
+          condition:
+            lambda: |-
+              return id(factory_reset_hold_count) >= 40;
+
+          then:
+            - logger.log:
+                level: WARN
+                format: "Factory reset requested - both buttons held for 10 seconds"
+
+            - button.press: factory_reset_button
+
+
+# ============================================================
+# Home Assistant button events
+# ============================================================
+
+# The physical GPIO states are hidden from Home Assistant.
+#
+# Customers instead see clean Button 1 / Button 2 event
+# entities supporting:
+#
+#   single
+#   double
+#   hold
+
+event:
+  - platform: template
+    name: "Button 1"
+    id: button_1_event
+    device_class: button
+    event_types:
+      - single
+      - double
+      - hold
+
+  - platform: template
+    name: "Button 2"
+    id: button_2_event
+    device_class: button
+    event_types:
+      - single
+      - double
+      - hold
+
+
+# ============================================================
+# Physical buttons + presence
+# ============================================================
+
+binary_sensor:
+
+  # ----------------------------------------------------------
+  # LD2410C
+  # ----------------------------------------------------------
+
+  # Presence itself is deliberately NOT throttled.
+  #
+  # Home Assistant automations therefore receive presence
+  # changes immediately.
+
+  - platform: ld2410
+    ld2410_id: radar
+
+    has_target:
+      name: "Presence"
+
+    has_moving_target:
+      name: "Moving Target"
+
+    has_still_target:
+      name: "Still Target"
+
+
+  # ----------------------------------------------------------
+  # Button 1 - GPIO2
+  # ----------------------------------------------------------
+
+  - platform: gpio
+    id: button_1
+    internal: true
+
+    pin:
+      number: GPIO2
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+
+    filters:
+      - delayed_on_off: 20ms
+
+    on_multi_click:
+
+      # Double press.
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 400ms
+          - ON for at most 500ms
+          - OFF for at least 200ms
+
+        then:
+          - event.trigger:
+              id: button_1_event
+              event_type: double
+
+
+      # Hold.
+      #
+      # If Button 2 is also held, suppress the normal HA hold
+      # event because the user may be performing a factory
+      # reset gesture instead.
+      - timing:
+          - ON for at least 800ms
+
+        then:
+          - if:
+              condition:
+                binary_sensor.is_off: button_2
+
+              then:
+                - event.trigger:
+                    id: button_1_event
+                    event_type: hold
+
+
+      # Single press.
+      - timing:
+          - ON for at most 500ms
+          - OFF for at least 450ms
+
+        then:
+          - event.trigger:
+              id: button_1_event
+              event_type: single
+
+
+  # ----------------------------------------------------------
+  # Button 2 - GPIO3
+  # ----------------------------------------------------------
+
+  - platform: gpio
+    id: button_2
+    internal: true
+
+    pin:
+      number: GPIO3
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+
+    filters:
+      - delayed_on_off: 20ms
+
+    on_multi_click:
+
+      # Double press.
+      - timing:
+          - ON for at most 500ms
+          - OFF for at most 400ms
+          - ON for at most 500ms
+          - OFF for at least 200ms
+
+        then:
+          - event.trigger:
+              id: button_2_event
+              event_type: double
+
+
+      # Hold.
+      #
+      # Suppressed when Button 1 is also being held for the
+      # factory-reset gesture.
+      - timing:
+          - ON for at least 800ms
+
+        then:
+          - if:
+              condition:
+                binary_sensor.is_off: button_1
+
+              then:
+                - event.trigger:
+                    id: button_2_event
+                    event_type: hold
+
+
+      # Single press.
+      - timing:
+          - ON for at most 500ms
+          - OFF for at least 450ms
+
+        then:
+          - event.trigger:
+              id: button_2_event
+              event_type: single
