@@ -2,9 +2,11 @@
 
 Tiny, local-first smart-home hardware for Home Assistant and ESPHome.
 
-Scoopy Node is a compact USB-C powered room interface built around an ESP32-C3. The current hardware combines two physical buttons, three status LEDs, optional LD2410C mmWave presence sensing, and an I²C expansion connection in a small 3D-printed enclosure.
+Scoopy Node is a compact USB-C powered room interface built around an ESP32-C3. The current hardware combines two physical buttons, three status LEDs, LD2410C mmWave presence sensing, and an I²C expansion connection in a small 3D-printed enclosure.
 
-This repository contains the open hardware, printable enclosure files, ESPHome firmware, captive-portal UI, manufacturing outputs, and project documentation.
+Scoopy Compact uses the same core hardware and firmware without the mmWave presence sensor for rooms where presence sensing is not needed.
+
+This repository contains the source-available hardware files, printable enclosure files, ESPHome firmware, captive-portal UI, manufacturing outputs, and project documentation.
 
 ## Repository structure
 
@@ -15,8 +17,8 @@ hardware/
   bom/               Bill of materials and manufacturing exports
 
 enclosure/
-  compact/           Printable files for the compact enclosure
-  presence/          Printable files for the mmWave presence enclosure
+  compact/           Printable files for Scoopy Compact
+  presence/          Printable files for Scoopy with mmWave presence
 
 firmware/
   esphome/           Unified ESPHome configuration and custom components
@@ -32,7 +34,7 @@ Each enclosure variant contains STL exports and a location for slicer-ready 3MF 
 
 ## Current firmware
 
-`firmware/esphome/scoopy.yaml` is designed to run on both Scoopy Compact and Scoopy Presence using the same firmware image.
+`firmware/esphome/scoopy.yaml` is designed to run on both Scoopy and Scoopy Compact using the same firmware image.
 
 Current firmware features include:
 
@@ -43,11 +45,11 @@ Current firmware features include:
 - USB serial provisioning through Improv
 - Two button inputs
 - Three controllable status LEDs
-- Optional LD2410C mmWave presence sensing
+- LD2410C mmWave presence sensing when the radar is fitted
 - I²C expansion bus
 - Wi-Fi recovery by holding both buttons for 10 seconds
 
-If the optional LD2410C is not fitted, the rest of Scoopy continues to operate normally.
+The same firmware also runs on Scoopy Compact. If the LD2410C is not fitted, the rest of Scoopy continues to operate normally.
 
 ## Status
 
@@ -59,20 +61,31 @@ V1 is currently in development and validation. Hardware, firmware, enclosure fil
 - Local-first operation with Home Assistant and ESPHome
 - Simple USB-C power with no batteries to replace
 - Useful physical controls and visible feedback
-- Optional room presence sensing
-- Open files that are practical to inspect, modify, and reproduce
+- mmWave room presence sensing in the standard Scoopy enclosure
+- A smaller Compact version for rooms where presence sensing is not needed
+- Source files that are practical to inspect, modify, and reproduce for personal projects
 
 ## Hardware overview
 
-Current V1 hardware includes:
+Current V1 Scoopy hardware includes:
 
 - ESP32-C3
 - 2 × tactile buttons
 - 3 × configurable LEDs
-- Optional HLK-LD2410C mmWave presence sensor
+- HLK-LD2410C mmWave presence sensor
 - I²C expansion header
 - USB-C power
 - 3D-printed enclosure
+
+Scoopy Compact omits the LD2410C and uses the smaller enclosure.
+
+## Build your own
+
+The hardware, firmware, and printable files are available so you can inspect Scoopy, build one for yourself, modify it, and experiment with your own non-commercial versions.
+
+Commercial manufacture or sale requires prior permission from Nice Hat Thanks.
+
+See [`LICENSE`](LICENSE) for the full terms.
 
 ## Documentation
 
@@ -86,4 +99,8 @@ Project updates and product information: https://nicehatthanks.com
 
 ## Licence
 
-A hardware/software/documentation licence will be added before the first formal public release.
+Scoopy is **source available for personal and non-commercial use**. You may inspect the files, build your own, modify them, and share non-commercial derivatives under the terms in [`LICENSE`](LICENSE).
+
+Commercial manufacture, sale, or other commercial use requires prior written permission from Nice Hat Thanks.
+
+Scoopy is not released under an open-source or open-hardware licence.
