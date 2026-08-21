@@ -376,7 +376,7 @@
         </form>
 
         <div class="status" id="status" role="status" aria-live="polite">
-          Connecting Scoopy… You can close this window once Scoopy joins your Wi-Fi.
+          Connecting Scoopy… This page should close automatically.
         </div>
 
         <div class="device-wrap">
@@ -510,7 +510,7 @@
 
       connectButton.disabled = true;
       connectButton.textContent = 'Connecting…';
-      showStatus('Saving Wi-Fi details and connecting Scoopy…');
+      showStatus('Connecting Scoopy to Wi-Fi… This page should close automatically.');
 
       try {
         const params = new URLSearchParams({ ssid, psk });
@@ -523,11 +523,11 @@
           throw new Error('Wi-Fi settings were not accepted');
         }
 
-        showStatus('Wi-Fi details saved. Scoopy is connecting now. You can close this window once it joins your Wi-Fi.');
+        showStatus("Scoopy is connecting to Wi-Fi. This page should close automatically. If it doesn't, you can close it once the Scoopy setup network disappears.");
       } catch (error) {
         connectButton.disabled = false;
         connectButton.textContent = 'Connect Scoopy';
-        showStatus('Scoopy could not save those Wi-Fi details. Check the network name and password, then try again.');
+        showStatus('Scoopy could not connect using those Wi-Fi settings. Check the network name and password, then try again.');
       }
     });
 
