@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#F5F0E6">
   <title>Scoopy Setup</title>
 
@@ -14,25 +11,17 @@
       --cream: #F5F0E6;
       --cream-light: #FBF8F1;
       --ink: #1C211B;
-
       --pink: #E496B3;
       --pink-soft: #F5D8E3;
-
       --blue: #B6D6EB;
       --blue-soft: #DFECF5;
-
       --muted: #687067;
       --border: rgba(28, 33, 27, 0.14);
-
-      --shadow:
-        0 22px 60px rgba(28, 33, 27, 0.10);
-
+      --shadow: 0 22px 60px rgba(28, 33, 27, 0.10);
       --radius: 28px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html,
     body {
@@ -40,12 +29,7 @@
       min-height: 100%;
       background: var(--cream);
       color: var(--ink);
-      font-family:
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body {
@@ -96,7 +80,6 @@
     .card {
       position: relative;
       overflow: hidden;
-
       background: var(--cream-light);
       border: 1px solid rgba(28, 33, 27, 0.10);
       border-radius: var(--radius);
@@ -109,24 +92,17 @@
       height: 8px;
     }
 
-    .accent-pink {
-      background: var(--pink);
-    }
+    .accent-pink { background: var(--pink); }
+    .accent-blue { background: var(--blue); }
 
-    .accent-blue {
-      background: var(--blue);
-    }
-
-    .content {
-      padding: 34px 30px 28px;
-    }
+    .content { padding: 34px 30px 28px; }
 
     .brand {
       display: flex;
       justify-content: center;
       margin-bottom: 24px;
     }
-    
+
     .brand-name {
       font-size: 31px;
       line-height: 1;
@@ -136,9 +112,7 @@
 
     h1 {
       margin: 0;
-
       text-align: center;
-
       font-size: 25px;
       line-height: 1.2;
       letter-spacing: -0.5px;
@@ -146,28 +120,19 @@
 
     .intro {
       max-width: 310px;
-
       margin: 10px auto 30px;
-
       text-align: center;
-
       color: var(--muted);
-
       font-size: 15px;
       line-height: 1.55;
     }
 
-    .field {
-      margin-bottom: 18px;
-    }
+    .field { margin-bottom: 18px; }
 
     label {
       display: block;
-
       margin-bottom: 7px;
-
       color: var(--ink);
-
       font-size: 13px;
       font-weight: 700;
     }
@@ -176,45 +141,27 @@
     input {
       width: 100%;
       min-height: 52px;
-
       border: 1px solid var(--border);
       border-radius: 15px;
-
       background: var(--cream);
       color: var(--ink);
-
       padding: 0 15px;
-
       font: inherit;
       font-size: 16px;
-
       outline: none;
       appearance: none;
     }
 
-    input::placeholder {
-      color: #92988F;
-    }
+    input::placeholder { color: #92988F; }
 
     select {
       padding-right: 44px;
-
       background-image:
-        linear-gradient(
-          45deg,
-          transparent 50%,
-          var(--ink) 50%
-        ),
-        linear-gradient(
-          135deg,
-          var(--ink) 50%,
-          transparent 50%
-        );
-
+        linear-gradient(45deg, transparent 50%, var(--ink) 50%),
+        linear-gradient(135deg, var(--ink) 50%, transparent 50%);
       background-position:
         calc(100% - 20px) 23px,
         calc(100% - 15px) 23px;
-
       background-size: 5px 5px;
       background-repeat: no-repeat;
     }
@@ -222,26 +169,19 @@
     select:focus,
     input:focus {
       border-color: var(--pink);
-
-      box-shadow:
-        0 0 0 4px rgba(228, 150, 179, 0.18);
+      box-shadow: 0 0 0 4px rgba(228, 150, 179, 0.18);
     }
 
     .manual {
       margin-top: 9px;
-
       border: 0;
       padding: 0;
-
       background: none;
       color: var(--ink);
-
       font: inherit;
       font-size: 13px;
       font-weight: 650;
-
       cursor: pointer;
-
       text-decoration: underline;
       text-decoration-color: var(--pink);
       text-decoration-thickness: 2px;
@@ -253,73 +193,50 @@
       margin-top: 14px;
     }
 
-    .manual-field.visible {
-      display: block;
-    }
+    .manual-field.visible { display: block; }
 
     .connect {
       width: 100%;
       min-height: 54px;
-
       margin-top: 6px;
-
       border: 0;
       border-radius: 16px;
-
       background: var(--ink);
       color: var(--cream);
-
       font: inherit;
       font-size: 16px;
       font-weight: 800;
-
       cursor: pointer;
-
-      box-shadow:
-        0 8px 20px rgba(28, 33, 27, 0.16);
-
-      transition:
-        transform 120ms ease,
-        box-shadow 120ms ease;
+      box-shadow: 0 8px 20px rgba(28, 33, 27, 0.16);
+      transition: transform 120ms ease, box-shadow 120ms ease;
     }
 
     .connect:hover,
     .connect:focus-visible {
       transform: translateY(-1px);
-
-      box-shadow:
-        0 11px 24px rgba(28, 33, 27, 0.20);
+      box-shadow: 0 11px 24px rgba(28, 33, 27, 0.20);
     }
 
-    .connect:active {
-      transform: translateY(1px);
-    }
+    .connect:active { transform: translateY(1px); }
 
     .status {
       display: none;
-
       margin-top: 18px;
       padding: 14px 16px;
-
       border: 1px solid rgba(182, 214, 235, 0.8);
       border-radius: 15px;
-
       background: var(--blue-soft);
       color: var(--ink);
-
       font-size: 13px;
       line-height: 1.5;
       text-align: center;
     }
 
-    .status.visible {
-      display: block;
-    }
+    .status.visible { display: block; }
 
     .device-wrap {
       display: flex;
       justify-content: center;
-
       margin-top: 23px;
     }
 
@@ -327,29 +244,17 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-
       margin: 0;
-
       padding: 7px 12px;
-
       border-radius: 999px;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--pink-soft),
-          var(--blue-soft)
-        );
-
+      background: linear-gradient(90deg, var(--pink-soft), var(--blue-soft));
       color: var(--muted);
-
       font-size: 11px;
     }
 
     .device-dot {
       width: 7px;
       height: 7px;
-
       border-radius: 50%;
       background: var(--pink);
     }
@@ -363,46 +268,25 @@
       display: flex;
       justify-content: center;
       gap: 8px;
-
       margin-top: 19px;
     }
 
     .sprinkle {
       width: 16px;
       height: 5px;
-
       border-radius: 999px;
-
       transform: rotate(-12deg);
     }
 
-    .sprinkle:nth-child(1) {
-      background: var(--pink);
-      transform: rotate(15deg);
-    }
-
-    .sprinkle:nth-child(2) {
-      background: var(--blue);
-      transform: rotate(-12deg);
-    }
-
-    .sprinkle:nth-child(3) {
-      background: var(--pink);
-      transform: rotate(-20deg);
-    }
-
-    .sprinkle:nth-child(4) {
-      background: var(--blue);
-      transform: rotate(18deg);
-    }
+    .sprinkle:nth-child(1) { background: var(--pink); transform: rotate(15deg); }
+    .sprinkle:nth-child(2) { background: var(--blue); transform: rotate(-12deg); }
+    .sprinkle:nth-child(3) { background: var(--pink); transform: rotate(-20deg); }
+    .sprinkle:nth-child(4) { background: var(--blue); transform: rotate(18deg); }
 
     .footer {
       margin: 17px 0 0;
-
       text-align: center;
-
       color: #7C837A;
-
       font-size: 11px;
       line-height: 1.4;
     }
@@ -413,135 +297,65 @@
         padding-top: 14px;
       }
 
-      .content {
-        padding: 30px 22px 24px;
-      }
-
-      .card {
-        border-radius: 23px;
-      }
-
-      .brand-name {
-        font-size: 29px;
-      }
+      .content { padding: 30px 22px 24px; }
+      .card { border-radius: 23px; }
+      .brand-name { font-size: 29px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
-      *::after {
-        transition: none !important;
-      }
+      *::after { transition: none !important; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="page-decoration" aria-hidden="true">
     <div class="blob blob-pink"></div>
     <div class="blob blob-blue"></div>
   </div>
 
   <main class="shell">
-
-    <section
-      class="card"
-      aria-labelledby="welcome-title"
-    >
-
-      <div
-        class="accent-bar"
-        aria-hidden="true"
-      >
+    <section class="card" aria-labelledby="welcome-title">
+      <div class="accent-bar" aria-hidden="true">
         <div class="accent-pink"></div>
         <div class="accent-blue"></div>
       </div>
 
       <div class="content">
-
         <div class="brand" aria-label="Scoopy">
-        <span class="brand-name">
-            Scoopy
-          </span>
+          <span class="brand-name">Scoopy</span>
         </div>
 
-
-        <h1 id="welcome-title">
-          Welcome to Scoopy!
-        </h1>
-
-        <p class="intro">
-          Let's get your Scoopy connected to Wi-Fi.
-        </p>
-
+        <h1 id="welcome-title">Welcome to Scoopy!</h1>
+        <p class="intro">Let's get your Scoopy connected to Wi-Fi.</p>
 
         <form id="wifi-form">
-
           <div class="field">
+            <label for="wifi-network">Wi-Fi network</label>
 
-            <label for="wifi-network">
-              Wi-Fi network
-            </label>
-
-            <select
-              id="wifi-network"
-              name="ssid"
-            >
-              <option value="">
-                Choose a network
-              </option>
-
-              <option value="Home WiFi">
-                Home WiFi
-              </option>
-
-              <option value="Kitchen 2.4 GHz">
-                Kitchen 2.4 GHz
-              </option>
-
-              <option value="Scoopy Test Network">
-                Scoopy Test Network
-              </option>
+            <select id="wifi-network" name="ssid">
+              <option value="">Loading networks…</option>
             </select>
 
-
-            <button
-              class="manual"
-              id="manual-toggle"
-              type="button"
-            >
+            <button class="manual" id="manual-toggle" type="button">
               Can't see your network?
             </button>
 
-
-            <div
-              class="manual-field"
-              id="manual-field"
-            >
-
-              <label for="manual-ssid">
-                Network name
-              </label>
-
+            <div class="manual-field" id="manual-field">
+              <label for="manual-ssid">Network name</label>
               <input
                 id="manual-ssid"
                 type="text"
                 autocomplete="off"
                 placeholder="Enter Wi-Fi name"
               >
-
             </div>
-
           </div>
 
-
           <div class="field">
-
-            <label for="wifi-password">
-              Password
-            </label>
-
+            <label for="wifi-password">Password</label>
             <input
               id="wifi-password"
               name="psk"
@@ -549,127 +363,128 @@
               autocomplete="current-password"
               placeholder="Wi-Fi password"
             >
-
           </div>
 
-
-          <button
-            class="connect"
-            type="submit"
-          >
-            Connect Scoopy
-          </button>
-
+          <button class="connect" type="submit">Connect Scoopy</button>
         </form>
 
-
-        <div
-          class="status"
-          id="status"
-          role="status"
-          aria-live="polite"
-        >
-          Connecting Scoopy… You can close this window once
-          Scoopy joins your Wi-Fi.
+        <div class="status" id="status" role="status" aria-live="polite">
+          Connecting Scoopy… You can close this window once Scoopy joins your Wi-Fi.
         </div>
-
 
         <div class="device-wrap">
-
           <p class="device">
-
-            <span
-              class="device-dot"
-              aria-hidden="true"
-            ></span>
-
+            <span class="device-dot" aria-hidden="true"></span>
             Device:
-
-            <strong id="device-name">
-              scoopy-2176d8
-            </strong>
-
+            <strong id="device-name">Scoopy</strong>
           </p>
-
         </div>
 
-
-        <div
-          class="sprinkles"
-          aria-hidden="true"
-        >
+        <div class="sprinkles" aria-hidden="true">
           <span class="sprinkle"></span>
           <span class="sprinkle"></span>
           <span class="sprinkle"></span>
           <span class="sprinkle"></span>
         </div>
-
       </div>
-
     </section>
 
-
-    <p class="footer">
-      Scoopy Node · Open-source smart room control
-    </p>
-
+    <p class="footer">Scoopy Node · Open-source smart room control</p>
   </main>
 
-
   <script>
+    const manualToggle = document.getElementById('manual-toggle');
+    const manualField = document.getElementById('manual-field');
+    const manualSsid = document.getElementById('manual-ssid');
+    const networkSelect = document.getElementById('wifi-network');
+    const deviceName = document.getElementById('device-name');
+    const form = document.getElementById('wifi-form');
+    const status = document.getElementById('status');
 
-    const manualToggle =
-      document.getElementById('manual-toggle');
+    const localPreview = window.location.protocol === 'file:';
 
-    const manualField =
-      document.getElementById('manual-field');
+    const mockConfig = {
+      name: 'scoopy-2176d8',
+      aps: [
+        { ssid: 'Home WiFi', rssi: -39, lock: true },
+        { ssid: 'Kitchen 2.4 GHz', rssi: -58, lock: true },
+        { ssid: 'Scoopy Test Network', rssi: -72, lock: false }
+      ]
+    };
 
-    const manualSsid =
-      document.getElementById('manual-ssid');
+    function populateNetworks(aps) {
+      networkSelect.innerHTML = '';
 
-    const networkSelect =
-      document.getElementById('wifi-network');
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = 'Choose a network';
+      networkSelect.appendChild(placeholder);
 
-    const form =
-      document.getElementById('wifi-form');
+      const uniqueNetworks = new Map();
 
-    const status =
-      document.getElementById('status');
+      (aps || [])
+        .filter(ap => ap && ap.ssid)
+        .sort((a, b) => (b.rssi || -100) - (a.rssi || -100))
+        .forEach(ap => {
+          if (!uniqueNetworks.has(ap.ssid)) {
+            uniqueNetworks.set(ap.ssid, ap);
+          }
+        });
 
+      uniqueNetworks.forEach(ap => {
+        const option = document.createElement('option');
+        option.value = ap.ssid;
+        option.textContent = ap.ssid;
+        networkSelect.appendChild(option);
+      });
 
-    manualToggle.addEventListener(
-      'click',
-      () => {
-
-        const visible =
-          manualField.classList.toggle('visible');
-
-        manualToggle.textContent =
-          visible
-            ? 'Choose from scanned networks'
-            : "Can't see your network?";
-
-        if (visible) {
-          networkSelect.value = '';
-          manualSsid.focus();
-        }
-
+      if (uniqueNetworks.size === 0) {
+        placeholder.textContent = 'No networks found';
       }
-    );
+    }
 
+    async function loadConfig() {
+      try {
+        const config = localPreview
+          ? mockConfig
+          : await fetch('/config.json', { cache: 'no-store' }).then(response => {
+              if (!response.ok) {
+                throw new Error('Unable to load Scoopy configuration');
+              }
 
-    form.addEventListener(
-      'submit',
-      (event) => {
+              return response.json();
+            });
 
-        event.preventDefault();
-
+        deviceName.textContent = config.name || 'Scoopy';
+        populateNetworks(config.aps);
+      } catch (error) {
+        deviceName.textContent = 'Scoopy';
+        networkSelect.innerHTML = '<option value="">Unable to scan networks</option>';
+        status.textContent = 'Scoopy could not load nearby Wi-Fi networks. You can still enter your network name manually.';
         status.classList.add('visible');
-
       }
-    );
+    }
 
+    manualToggle.addEventListener('click', () => {
+      const visible = manualField.classList.toggle('visible');
+
+      manualToggle.textContent = visible
+        ? 'Choose from scanned networks'
+        : "Can't see your network?";
+
+      if (visible) {
+        networkSelect.value = '';
+        manualSsid.focus();
+      }
+    });
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      status.textContent = 'Connecting Scoopy… You can close this window once Scoopy joins your Wi-Fi.';
+      status.classList.add('visible');
+    });
+
+    loadConfig();
   </script>
-
 </body>
 </html>
