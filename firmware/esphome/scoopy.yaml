@@ -55,6 +55,18 @@ esphome:
   # every device to use exactly the same firmware image.
   name_add_mac_suffix: true
 
+  # Start the red setup pulse after components have initialised.
+  # If Wi-Fi connects immediately, wifi.on_connect below turns
+  # it back off.
+  on_boot:
+    priority: -100
+    then:
+      - light.turn_on:
+          id: middle_led
+          effect: "Pulse Dim"
+      - lambda: |-
+          id(setup_pulse_active) = true;
+
 
 # ============================================================
 # ESP32-C3
@@ -64,6 +76,21 @@ esp32:
   board: esp32-c3-devkitm-1
   framework:
     type: esp-idf
+
+
+# ============================================================
+# Scoopy custom components
+# ============================================================
+
+# Override only ESPHome's captive_portal component so Scoopy
+# can use the branded setup page while retaining ESPHome's
+# normal Wi-Fi storage, DNS and captive-portal behaviour.
+external_components:
+  - source:
+      type: local
+      path: components
+    components:
+      - captive_portal
 
 
 # ============================================================
@@ -100,6 +127,17 @@ wifi:
   on_connect:
     then:
       - light.turn_off: middle_led
+      - lambda: |-
+          id(setup_pulse_active) = false;
+
+  # If Scoopy loses Wi-Fi, resume the gentle setup/status pulse.
+  on_disconnect:
+    then:
+      - light.turn_on:
+          id: middle_led
+          effect: "Pulse Dim"
+      - lambda: |-
+          id(setup_pulse_active) = true;
 
 
 # Provides the first-time Wi-Fi setup page.
@@ -444,12 +482,13 @@ globals:
     restore_value: no
     initial_value: "0"
 
-  # Used to divide the 250 ms status loop down to a slower
-  # setup-mode blink.
-  - id: slow_blink_count
-    type: int
+  # Tracks whether the setup pulse is currently controlling
+  # the middle LED. This prevents the pulse effect from being
+  # restarted every 250 ms.
+  - id: setup_pulse_active
+    type: bool
     restore_value: no
-    initial_value: "0"
+    initial_value: "false"
 
 
 # ============================================================
@@ -492,8 +531,7 @@ interval:
               return id(factory_reset_hold_count) >= 36;
 
           then:
-            # 9-10 seconds:
-            # very fast warning blink.
+            # 9-10 seconds: very fast warning blink.
             - light.toggle: middle_led
 
           else:
@@ -503,8 +541,21 @@ interval:
                     return id(factory_reset_hold_count) >= 28;
 
                 then:
-                  # 7-9 seconds:
-                  # slower warning blink.
+                  # Entering the reset warning phase: stop the
+                  # setup pulse before manually blinking.
+                  - if:
+                      condition:
+                        lambda: |-
+                          return id(setup_pulse_active);
+
+                      then:
+                        - light.turn_on:
+                            id: middle_led
+                            effect: "None"
+                        - lambda: |-
+                            id(setup_pulse_active) = false;
+
+                  # 7-9 seconds: slower warning blink.
                   - lambda: |-
                       static bool reset_fast_toggle = false;
                       reset_fast_toggle = !reset_fast_toggle;
@@ -523,45 +574,26 @@ interval:
                   # Setup / Wi-Fi status
                   # ------------------------------------------------
 
+                  # When Scoopy is offline, keep the red LED on a
+                  # gentle pulse. If a reset warning temporarily
+                  # took over, this restores the pulse afterwards.
                   - if:
                       condition:
-                        wifi.connected:
+                        not:
+                          wifi.connected:
 
                       then:
-                        # Once connected, do NOT continually control
-                        # the middle LED here.
-                        #
-                        # Home Assistant is free to use it normally.
-                        - lambda: |-
-                            id(slow_blink_count) = 0;
-
-                      else:
-
                         - if:
                             condition:
-                              wifi.ap_active:
+                              lambda: |-
+                                return !id(setup_pulse_active);
 
                             then:
-                              # Setup AP active:
-                              # slow blink, toggling once per second.
+                              - light.turn_on:
+                                  id: middle_led
+                                  effect: "Pulse Dim"
                               - lambda: |-
-                                  id(slow_blink_count)++;
-
-                                  if (id(slow_blink_count) >= 4) {
-                                    id(slow_blink_count) = 0;
-
-                                    if (id(middle_led).current_values.is_on()) {
-                                      id(middle_led).turn_off().perform();
-                                    } else {
-                                      id(middle_led).turn_on().perform();
-                                    }
-                                  }
-
-                            else:
-                              # Wi-Fi disconnected / attempting
-                              # connection without the setup AP:
-                              # fast blink.
-                              - light.toggle: middle_led
+                                  id(setup_pulse_active) = true;
 
 
       # ------------------------------------------------------
