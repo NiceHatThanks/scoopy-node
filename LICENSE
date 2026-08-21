@@ -1,0 +1,61 @@
+Scoopy Source Available Licence v1.0
+
+Copyright (c) 2026 Nice Hat Thanks. All rights reserved except as expressly granted below.
+
+This licence applies to the Scoopy project materials in this repository, including hardware design files, PCB layouts, Gerbers, bills of materials, firmware, software, documentation, 3D models, printable enclosure files, and other project files, unless a file or directory states that different terms apply.
+
+1. Permission for personal and non-commercial use
+
+You may, for personal and non-commercial purposes:
+
+- view, study, copy, and use the project materials;
+- manufacture or assemble Scoopy hardware for yourself;
+- print Scoopy enclosure parts for yourself;
+- modify the hardware, firmware, software, documentation, or enclosure files;
+- create your own non-commercial derivative projects based on the project materials; and
+- share original or modified project materials, provided that you keep this licence and the original copyright notice with them and do not represent your version as an official Nice Hat Thanks product.
+
+2. Commercial use requires permission
+
+You may not use the project materials for commercial purposes without prior written permission from Nice Hat Thanks.
+
+Commercial use includes, but is not limited to:
+
+- manufacturing or selling Scoopy devices;
+- selling assembled or partially assembled kits;
+- selling PCBs, enclosure parts, or other components made from the project files;
+- selling products substantially derived from the Scoopy hardware, firmware, or enclosure designs;
+- charging for access to copies or modified versions of the project materials; or
+- using the project materials as part of a paid manufacturing, licensing, or commercial product offering.
+
+Commercial licences may be available separately. Contact Nice Hat Thanks if you would like to manufacture, sell, distribute, or otherwise use Scoopy commercially.
+
+3. Attribution
+
+If you share the project materials or a modified version, you must retain the copyright notice and a copy of this licence. You must make it clear when changes have been made.
+
+4. Names, logos, and branding
+
+This licence does not grant permission to use the Nice Hat Thanks name, Scoopy name, logos, product imagery, trade dress, or other branding in a way that suggests endorsement, sponsorship, or that a third-party product is an official Nice Hat Thanks product.
+
+You may use the name "Scoopy" only as reasonably necessary to identify compatibility with or derivation from the project, for example "compatible with Scoopy" or "based on the Scoopy design", provided that the wording does not imply official status or endorsement.
+
+5. Third-party materials
+
+This licence does not override licences or restrictions that apply to third-party libraries, components, models, software, or other materials. Those items remain subject to their respective terms.
+
+6. No warranty
+
+THE PROJECT MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, SAFETY, OR FITNESS FOR USE IN ANY PARTICULAR APPLICATION.
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, NICE HAT THANKS SHALL NOT BE LIABLE FOR ANY CLAIM, DAMAGES, LOSS, OR OTHER LIABILITY ARISING FROM OR IN CONNECTION WITH THE PROJECT MATERIALS OR THEIR USE.
+
+7. Termination
+
+Your rights under this licence terminate automatically if you breach its terms. Your rights may be restored if the breach is fully remedied and Nice Hat Thanks confirms restoration in writing.
+
+8. Other permissions
+
+Nothing in this licence prevents Nice Hat Thanks from offering the same materials under different licence terms, including commercial licences, or from granting additional permissions to particular people or organisations.
+
+This is a source-available, non-commercial licence. It is not an open-source or open-hardware licence as those terms are commonly defined.
