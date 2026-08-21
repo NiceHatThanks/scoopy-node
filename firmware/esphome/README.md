@@ -2,7 +2,7 @@
 
 This directory contains the unified ESPHome firmware for Scoopy Node.
 
-`Scoopy Compact` and `Scoopy Presence` use the same `scoopy.yaml` configuration. Presence-specific entities are provided by the optional LD2410C radar; if no radar is fitted, the rest of the device continues to operate normally.
+Scoopy and Scoopy Compact use the same `scoopy.yaml` configuration. Standard Scoopy hardware includes the LD2410C mmWave radar. Scoopy Compact omits the radar; when no LD2410C is fitted, the rest of the device continues to operate normally.
 
 ## Files
 
@@ -52,7 +52,8 @@ The current configuration provides:
 - Two physical button inputs
 - Three PWM-controlled LEDs
 - A dim red pulse while Scoopy is waiting for Wi-Fi or disconnected
-- LD2410C presence, motion, still-target and distance entities when radar is fitted
+- LD2410C presence, motion, still-target and distance entities on Scoopy
+- Graceful operation without radar on Scoopy Compact
 - A generic I²C expansion bus on GPIO5/GPIO7
 
 ## Building and flashing
@@ -62,3 +63,7 @@ The production configuration intentionally does not contain a home Wi-Fi SSID or
 From an ESPHome environment, build or flash `scoopy.yaml` in the usual way. Local ESPHome build artefacts and secrets should remain untracked.
 
 Firmware is still under V1 validation, so behaviour and entity names may change before the first formal release.
+
+## Licence
+
+Scoopy firmware is covered by the repository's source-available, non-commercial [`LICENSE`](../../LICENSE). Personal builds and modifications are welcome; commercial use requires prior permission from Nice Hat Thanks.
