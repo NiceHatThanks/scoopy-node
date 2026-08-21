@@ -83,6 +83,7 @@ $RECYCLE.BIN/
 # Local Wi-Fi/API credentials - never commit
 secrets.yaml
 **/secrets.yaml
+*onboarding-test.yaml
 
 # ESPHome build/cache files
 .esphome/
