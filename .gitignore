@@ -74,3 +74,16 @@ $RECYCLE.BIN/
 *.swp
 *.swo
 *~
+
+
+# ============================================================
+# ESPHome
+# ============================================================
+
+# Local Wi-Fi/API credentials - never commit
+secrets.yaml
+**/secrets.yaml
+
+# ESPHome build/cache files
+.esphome/
+**/.esphome/
