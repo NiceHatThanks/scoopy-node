@@ -88,3 +88,9 @@ secrets.yaml
 # ESPHome build/cache files
 .esphome/
 **/.esphome/
+
+# Local manufacturing / production tools
+firmware/tools/
+
+# Local compiled firmware releases
+firmware/releases/
