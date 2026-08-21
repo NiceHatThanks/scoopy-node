@@ -219,6 +219,13 @@
 
     .connect:active { transform: translateY(1px); }
 
+    .connect:disabled {
+      cursor: default;
+      opacity: 0.72;
+      transform: none;
+      box-shadow: 0 8px 20px rgba(28, 33, 27, 0.10);
+    }
+
     .status {
       display: none;
       margin-top: 18px;
@@ -365,7 +372,7 @@
             >
           </div>
 
-          <button class="connect" type="submit">Connect Scoopy</button>
+          <button class="connect" id="connect-button" type="submit">Connect Scoopy</button>
         </form>
 
         <div class="status" id="status" role="status" aria-live="polite">
@@ -397,9 +404,11 @@
     const manualField = document.getElementById('manual-field');
     const manualSsid = document.getElementById('manual-ssid');
     const networkSelect = document.getElementById('wifi-network');
+    const wifiPassword = document.getElementById('wifi-password');
     const deviceName = document.getElementById('device-name');
     const form = document.getElementById('wifi-form');
     const status = document.getElementById('status');
+    const connectButton = document.getElementById('connect-button');
 
     const localPreview = window.location.protocol === 'file:';
 
@@ -411,6 +420,11 @@
         { ssid: 'Scoopy Test Network', rssi: -72, lock: false }
       ]
     };
+
+    function showStatus(message) {
+      status.textContent = message;
+      status.classList.add('visible');
+    }
 
     function populateNetworks(aps) {
       networkSelect.innerHTML = '';
@@ -460,8 +474,7 @@
       } catch (error) {
         deviceName.textContent = 'Scoopy';
         networkSelect.innerHTML = '<option value="">Unable to scan networks</option>';
-        status.textContent = 'Scoopy could not load nearby Wi-Fi networks. You can still enter your network name manually.';
-        status.classList.add('visible');
+        showStatus('Scoopy could not load nearby Wi-Fi networks. You can still enter your network name manually.');
       }
     }
 
@@ -478,10 +491,44 @@
       }
     });
 
-    form.addEventListener('submit', event => {
+    form.addEventListener('submit', async event => {
       event.preventDefault();
-      status.textContent = 'Connecting Scoopy… You can close this window once Scoopy joins your Wi-Fi.';
-      status.classList.add('visible');
+
+      const usingManualSsid = manualField.classList.contains('visible');
+      const ssid = (usingManualSsid ? manualSsid.value : networkSelect.value).trim();
+      const psk = wifiPassword.value;
+
+      if (!ssid) {
+        showStatus('Choose a Wi-Fi network or enter the network name manually.');
+        return;
+      }
+
+      if (localPreview) {
+        showStatus(`Preview mode: Scoopy would now connect to ${ssid}.`);
+        return;
+      }
+
+      connectButton.disabled = true;
+      connectButton.textContent = 'Connecting…';
+      showStatus('Saving Wi-Fi details and connecting Scoopy…');
+
+      try {
+        const params = new URLSearchParams({ ssid, psk });
+        const response = await fetch(`/wifisave?${params.toString()}`, {
+          method: 'GET',
+          cache: 'no-store'
+        });
+
+        if (!response.ok) {
+          throw new Error('Wi-Fi settings were not accepted');
+        }
+
+        showStatus('Wi-Fi details saved. Scoopy is connecting now. You can close this window once it joins your Wi-Fi.');
+      } catch (error) {
+        connectButton.disabled = false;
+        connectButton.textContent = 'Connect Scoopy';
+        showStatus('Scoopy could not save those Wi-Fi details. Check the network name and password, then try again.');
+      }
     });
 
     loadConfig();
