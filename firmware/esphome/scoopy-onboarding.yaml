@@ -1,0 +1,15 @@
+# Scoopy onboarding UI test build.
+#
+# This deliberately leaves scoopy.yaml untouched while we validate the
+# branded captive portal on real hardware. Once proven, the external component
+# block can move into the production configuration.
+
+packages:
+  scoopy_base: !include scoopy.yaml
+
+external_components:
+  - source:
+      type: local
+      path: components
+    components:
+      - captive_portal
