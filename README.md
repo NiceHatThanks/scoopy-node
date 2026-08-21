@@ -2,39 +2,56 @@
 
 Tiny, local-first smart-home hardware for Home Assistant and ESPHome.
 
-Scoopy Node is a compact USB-C powered room interface built around an ESP32-C3. The first hardware revision combines two physical buttons, three status LEDs, optional mmWave presence sensing, and an I²C expansion connection in a small 3D-printed enclosure.
+Scoopy Node is a compact USB-C powered room interface built around an ESP32-C3. The current hardware combines two physical buttons, three status LEDs, optional LD2410C mmWave presence sensing, and an I²C expansion connection in a small 3D-printed enclosure.
 
-This repository is the home for the open hardware, printable enclosure files, ESPHome firmware, manufacturing outputs, and documentation.
+This repository contains the open hardware, printable enclosure files, ESPHome firmware, captive-portal UI, manufacturing outputs, and project documentation.
 
 ## Repository structure
 
 ```text
 hardware/
-  kicad/         KiCad source files
-  gerbers/       Fabrication-ready Gerbers and drill files
-  bom/           Bill of materials and manufacturing exports
-  schematics/    Schematics and exported PDFs
+  kicad/             Editable KiCad source files
+  gerbers/           Fabrication-ready Gerbers and drill files
+  bom/               Bill of materials and manufacturing exports
 
 enclosure/
-  compact/       Printable files for the compact enclosure
-  presence/      Printable files for the mmWave presence enclosure
+  compact/           Printable files for the compact enclosure
+  presence/          Printable files for the mmWave presence enclosure
 
 firmware/
-  esphome/       ESPHome configuration and supporting files
+  esphome/           Unified ESPHome configuration and custom components
+  captive-portal/    Source for the branded Wi-Fi setup page
 
 docs/
-  setup.md       First-time setup
-  assembly.md    Hardware and enclosure assembly
-  troubleshooting.md
-
-images/          Product and documentation images
+  setup.md           First-time setup and Home Assistant pairing
+  assembly.md        Hardware and enclosure assembly notes
+  troubleshooting.md Common setup and hardware issues
 ```
 
 Each enclosure variant contains STL exports and a location for slicer-ready 3MF projects.
 
+## Current firmware
+
+`firmware/esphome/scoopy.yaml` is designed to run on both Scoopy Compact and Scoopy Presence using the same firmware image.
+
+Current firmware features include:
+
+- Unique `scoopy-XXXXXX` device naming using the ESP32 MAC address
+- Wi-Fi provisioning through a Scoopy-branded captive portal
+- ESPHome native API for Home Assistant
+- OTA firmware updates
+- USB serial provisioning through Improv
+- Two button inputs
+- Three controllable status LEDs
+- Optional LD2410C mmWave presence sensing
+- I²C expansion bus
+- Wi-Fi recovery by holding both buttons for 10 seconds
+
+If the optional LD2410C is not fitted, the rest of Scoopy continues to operate normally.
+
 ## Status
 
-The first revision is currently in development and validation. Files may change as hardware testing continues.
+V1 is currently in development and validation. Hardware, firmware, enclosure files, documentation, and manufacturing outputs may change while testing continues.
 
 ## Design goals
 
@@ -49,7 +66,7 @@ The first revision is currently in development and validation. Files may change 
 
 Current V1 hardware includes:
 
-- ESP32-C3 module
+- ESP32-C3
 - 2 × tactile buttons
 - 3 × configurable LEDs
 - Optional HLK-LD2410C mmWave presence sensor
@@ -57,9 +74,15 @@ Current V1 hardware includes:
 - USB-C power
 - 3D-printed enclosure
 
+## Documentation
+
+Start with [`docs/setup.md`](docs/setup.md) for first-time setup.
+
+For hardware files, see [`hardware/README.md`](hardware/README.md). For printable enclosure files, see [`enclosure/README.md`](enclosure/README.md). Firmware details are in [`firmware/esphome/README.md`](firmware/esphome/README.md).
+
 ## Website
 
-Project updates and product information: https://nicehatthanks.uk
+Project updates and product information: https://nicehatthanks.com
 
 ## Licence
 
