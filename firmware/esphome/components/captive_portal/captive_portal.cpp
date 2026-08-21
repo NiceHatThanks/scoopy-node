@@ -2,8 +2,9 @@
 #ifdef USE_CAPTIVE_PORTAL
 #include "esphome/core/log.h"
 #include "esphome/core/application.h"
+#include "esphome/core/helpers.h"
+#include "esphome/core/string_ref.h"
 #include "esphome/components/wifi/wifi_component.h"
-#include "json_escape.h"
 #include "scoopy_index.h"
 
 namespace esphome::captive_portal {
@@ -13,7 +14,7 @@ static const char *const TAG = "captive_portal";
 void CaptivePortal::handle_config(AsyncWebServerRequest *request) {
   AsyncResponseStream *stream = request->beginResponseStream(ESPHOME_F("application/json"));
   stream->addHeader(ESPHOME_F("cache-control"), ESPHOME_F("public, max-age=0, must-revalidate"));
-  char mac_s[18];
+  char mac_s[MAC_ADDRESS_PRETTY_BUFFER_SIZE];
   const char *mac_str = get_mac_address_pretty_into_buffer(mac_s);
 #ifdef USE_ESP8266
   stream->print(ESPHOME_F("{\"mac\":\""));
@@ -25,8 +26,12 @@ void CaptivePortal::handle_config(AsyncWebServerRequest *request) {
   stream->printf(R"({"mac":"%s","name":"%s","aps":[{})", mac_str, App.get_name().c_str());
 #endif
 
+  // An SSID can contain a " or \\ that would break the JSON, so escape it before writing it out. An SSID is at most
+  // 32 bytes (IEEE 802.11), so this is large enough that nothing is ever dropped. Reused for every scan result.
   char escaped_ssid[32 * JSON_ESCAPE_MAX_EXPANSION + 1];
   {
+    // Invariant: only bounded in-memory work under the lock; the network send
+    // happens later in request->send()
     wifi::ScanResultsLock lock(wifi::global_wifi_component);
     for (const auto &scan : wifi::global_wifi_component->get_scan_result()) {
       if (scan.get_is_hidden())
