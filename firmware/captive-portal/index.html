@@ -376,7 +376,7 @@
         </form>
 
         <div class="status" id="status" role="status" aria-live="polite">
-          Connecting Scoopy… This page should close automatically.
+          Connecting Scoopy…
         </div>
 
         <div class="device-wrap">
@@ -411,6 +411,8 @@
     const connectButton = document.getElementById('connect-button');
 
     const localPreview = window.location.protocol === 'file:';
+    const connectionTimeoutMs = 30000;
+    const statusPollMs = 1000;
 
     const mockConfig = {
       name: 'scoopy-2176d8',
@@ -424,6 +426,52 @@
     function showStatus(message) {
       status.textContent = message;
       status.classList.add('visible');
+    }
+
+    function resetConnectForm() {
+      connectButton.disabled = false;
+      connectButton.textContent = 'Connect Scoopy';
+      wifiPassword.focus();
+      wifiPassword.select();
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function waitForWifiConnection() {
+      const deadline = Date.now() + connectionTimeoutMs;
+      let unavailableCount = 0;
+
+      while (Date.now() < deadline) {
+        await sleep(statusPollMs);
+
+        try {
+          const response = await fetch('/wifi-status', { cache: 'no-store' });
+
+          if (!response.ok) {
+            throw new Error('Unable to read Wi-Fi status');
+          }
+
+          const wifiStatus = await response.json();
+
+          if (wifiStatus.connected) {
+            return 'connected';
+          }
+
+          unavailableCount = 0;
+        } catch (error) {
+          unavailableCount += 1;
+
+          // A successful connection normally removes the Scoopy setup AP,
+          // which makes this page unable to reach the status endpoint.
+          if (unavailableCount >= 3) {
+            return 'portal-gone';
+          }
+        }
+      }
+
+      return 'timeout';
     }
 
     function populateNetworks(aps) {
@@ -510,7 +558,7 @@
 
       connectButton.disabled = true;
       connectButton.textContent = 'Connecting…';
-      showStatus('Connecting Scoopy to Wi-Fi… This page should close automatically.');
+      showStatus(`Connecting Scoopy to ${ssid}…`);
 
       try {
         const params = new URLSearchParams({ ssid, psk });
@@ -523,11 +571,23 @@
           throw new Error('Wi-Fi settings were not accepted');
         }
 
-        showStatus("Scoopy is connecting to Wi-Fi. This page should close automatically. If it doesn't, you can close it once the Scoopy setup network disappears. Hopefully you won't need to read any of this because the page has already vanished by now. If you're still here, either you're an impressively quick reader, your Wi-Fi is taking its sweet time, Scoopy is having a little think, or I've made a mistake somewhere. Give it another moment, and if the Scoopy setup network disappears then everything has probably worked exactly as intended.");
+        const outcome = await waitForWifiConnection();
+
+        if (outcome === 'timeout') {
+          resetConnectForm();
+          showStatus('Scoopy could not connect using those Wi-Fi settings. Check the network name and password, then try again.');
+          return;
+        }
+
+        if (outcome === 'connected') {
+          showStatus('Connected! Scoopy is leaving setup mode. Your device should return to its normal Wi-Fi automatically.');
+          return;
+        }
+
+        showStatus('Scoopy has left setup mode. Your device should return to its normal Wi-Fi automatically.');
       } catch (error) {
-        connectButton.disabled = false;
-        connectButton.textContent = 'Connect Scoopy';
-        showStatus('Scoopy could not connect using those Wi-Fi settings. Check the network name and password, then try again.');
+        resetConnectForm();
+        showStatus('Scoopy could not save those Wi-Fi settings. Check the network name and password, then try again.');
       }
     });
 
