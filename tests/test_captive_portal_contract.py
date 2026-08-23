@@ -23,6 +23,12 @@ class CaptivePortalContractTests(unittest.TestCase):
         self.assertIn("wifi_soft_ap_ip()", CPP)
         self.assertRegex(CPP, r'url\s*==\s*ESPHOME_F\("/"\)')
 
+    def test_dhcp_advertises_captive_portal_uri(self):
+        self.assertIn("ESP_NETIF_CAPTIVEPORTAL_URI", CPP)
+        self.assertIn("esp_netif_dhcps_option", CPP)
+        self.assertIn("esp_netif_dhcps_stop", CPP)
+        self.assertIn("esp_netif_dhcps_start", CPP)
+
     def test_setup_ui_times_out_and_allows_retry(self):
         for frontend in (SOURCE_HTML, EMBEDDED):
             self.assertIn("/wifi-status", frontend)
@@ -30,6 +36,11 @@ class CaptivePortalContractTests(unittest.TestCase):
             self.assertIn("Connect Scoopy", frontend)
             self.assertIn("Check the network name and password", frontend)
             self.assertTrue("disabled = false" in frontend or "disabled=false" in frontend)
+
+    def test_setup_ui_keeps_scoopy_connecting_message(self):
+        for frontend in (SOURCE_HTML, EMBEDDED):
+            self.assertIn("impressively quick reader", frontend)
+            self.assertIn("Scoopy is having a little think", frontend)
 
 
 if __name__ == "__main__":
