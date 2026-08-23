@@ -7,6 +7,10 @@
 #include "esphome/components/wifi/wifi_component.h"
 #include "scoopy_index.h"
 
+#ifdef USE_ESP32
+#include <esp_netif.h>
+#endif
+
 namespace esphome::captive_portal {
 
 static const char *const TAG = "captive_portal";
@@ -89,6 +93,42 @@ void CaptivePortal::start() {
   }
 
   network::IPAddress ip = wifi::global_wifi_component->wifi_soft_ap_ip();
+
+#ifdef USE_ESP32
+  // Advertise Scoopy's setup page through DHCP option 114 (RFC 8910).
+  // Modern clients can discover the portal directly from the DHCP lease,
+  // while wildcard DNS + HTTP redirects remain in place for legacy clients.
+  esp_netif_t *ap_netif = esp_netif_get_handle_from_ifkey("WIFI_AP_DEF");
+  if (ap_netif != nullptr) {
+    char ip_buf[network::IP_ADDRESS_BUFFER_SIZE];
+    ip.str_to(ip_buf);
+    this->captive_portal_url_ = "http://";
+    this->captive_portal_url_ += ip_buf;
+    this->captive_portal_url_ += "/";
+
+    esp_err_t stop_err = esp_netif_dhcps_stop(ap_netif);
+    const bool dhcp_stopped = stop_err == ESP_OK || stop_err == ESP_ERR_ESP_NETIF_DHCP_ALREADY_STOPPED;
+    if (!dhcp_stopped) {
+      ESP_LOGW(TAG, "Could not stop DHCP server to set captive portal URI: %s", esp_err_to_name(stop_err));
+    } else {
+      esp_err_t option_err = esp_netif_dhcps_option(ap_netif, ESP_NETIF_OP_SET, ESP_NETIF_CAPTIVEPORTAL_URI,
+                                                    this->captive_portal_url_.data(),
+                                                    this->captive_portal_url_.size());
+      if (option_err != ESP_OK) {
+        ESP_LOGW(TAG, "Could not set DHCP captive portal URI: %s", esp_err_to_name(option_err));
+      } else {
+        ESP_LOGV(TAG, "DHCP captive portal URI: %s", this->captive_portal_url_.c_str());
+      }
+
+      esp_err_t start_err = esp_netif_dhcps_start(ap_netif);
+      if (start_err != ESP_OK && start_err != ESP_ERR_ESP_NETIF_DHCP_ALREADY_STARTED) {
+        ESP_LOGW(TAG, "Could not restart DHCP server after captive portal setup: %s", esp_err_to_name(start_err));
+      }
+    }
+  } else {
+    ESP_LOGW(TAG, "Could not find WiFi AP interface for captive portal DHCP option");
+  }
+#endif
 
 #if defined(USE_ESP32)
   this->dns_server_ = make_unique<DNSServer>();
