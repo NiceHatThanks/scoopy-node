@@ -2,6 +2,7 @@
 #include "esphome/core/defines.h"
 #ifdef USE_CAPTIVE_PORTAL
 #include <memory>
+#include <string>
 #if defined(USE_ESP32)
 #include "dns_server_esp32_idf.h"
 #elif defined(USE_ARDUINO)
@@ -56,6 +57,7 @@ class CaptivePortal final : public AsyncWebHandler, public Component {
   web_server_base::WebServerBase *base_;
   bool initialized_{false};
   bool active_{false};
+  std::string captive_portal_url_;
 #if defined(USE_ARDUINO) || defined(USE_ESP32)
   std::unique_ptr<DNSServer> dns_server_{nullptr};
 #endif
