@@ -25,7 +25,11 @@ CONFIG_ENABLE_CHIP_SHELL=y
 # Matter storage/crypto
 CONFIG_ESP_MATTER_NVS_USE_COMPACT_ATTR_STORAGE=y
 CONFIG_MBEDTLS_HKDF_C=y
-CONFIG_ESP_MATTER_MAX_DYNAMIC_ENDPOINT_COUNT=1
+
+# ESP-Matter's managed component includes bridge support, whose default
+# aggregator endpoint consumes one dynamic endpoint. Keep two available so
+# a non-bridge Scoopy build still compiles the bridge component safely.
+CONFIG_ESP_MATTER_MAX_DYNAMIC_ENDPOINT_COUNT=2
 
 # Keep multicast/groupcast surface minimal until required
 CONFIG_SUPPORT_GROUPCAST_CLUSTER=n
