@@ -4,7 +4,6 @@
 
 #include <esp_matter.h>
 #include <esp_matter_console.h>
-#include <common_macros.h>
 
 static const char *TAG = "scoopy_matter";
 static uint16_t button_1_endpoint_id = 0;
@@ -111,15 +110,22 @@ extern "C" void app_main()
 
     node::config_t node_config;
     node_t *node = node::create(&node_config, app_attribute_update_cb, app_identification_cb);
-    ABORT_APP_ON_FAILURE(node != nullptr, ESP_LOGE(TAG, "Failed to create Matter node"));
+    if (node == nullptr) {
+        ESP_LOGE(TAG, "Failed to create Matter node");
+        return;
+    }
 
     endpoint_t *button_1_endpoint = create_button_1_endpoint(node);
-    ABORT_APP_ON_FAILURE(button_1_endpoint != nullptr,
-                         ESP_LOGE(TAG, "Failed to create Button 1 endpoint"));
+    if (button_1_endpoint == nullptr) {
+        ESP_LOGE(TAG, "Failed to create Button 1 endpoint");
+        return;
+    }
 
     err = esp_matter::start(app_event_cb);
-    ABORT_APP_ON_FAILURE(err == ESP_OK,
-                         ESP_LOGE(TAG, "Failed to start Matter, err=%d", err));
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to start Matter, err=%d", err);
+        return;
+    }
 
 #if CONFIG_ENABLE_CHIP_SHELL
     esp_matter::console::diagnostics_register_commands();
