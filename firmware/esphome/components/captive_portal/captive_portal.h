@@ -49,6 +49,7 @@ class CaptivePortal final : public AsyncWebHandler, public Component {
 
   void handle_config(AsyncWebServerRequest *request);
   void handle_wifisave(AsyncWebServerRequest *request);
+  void handle_wifi_status(AsyncWebServerRequest *request);
   void handleRequest(AsyncWebServerRequest *req) override;
 
  protected:
