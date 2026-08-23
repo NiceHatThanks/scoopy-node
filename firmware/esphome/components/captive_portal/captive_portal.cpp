@@ -71,6 +71,13 @@ void CaptivePortal::handle_wifisave(AsyncWebServerRequest *request) {
   request->send(200, ESPHOME_F("text/plain"), ESPHOME_F("Saved. Connecting..."));
 }
 
+void CaptivePortal::handle_wifi_status(AsyncWebServerRequest *request) {
+  AsyncResponseStream *stream = request->beginResponseStream(ESPHOME_F("application/json"));
+  stream->addHeader(ESPHOME_F("Cache-Control"), ESPHOME_F("no-store"));
+  stream->printf(R"({"connected":%s})", wifi::global_wifi_component->is_connected() ? "true" : "false");
+  request->send(stream);
+}
+
 void CaptivePortal::setup() {
   this->disable_loop();
 }
@@ -117,11 +124,37 @@ void CaptivePortal::handleRequest(AsyncWebServerRequest *req) {
     return;
   }
 
-  // Preserve ESPHome captive detection behaviour: every other URL receives
-  // the Scoopy setup page.
+  if (url == ESPHOME_F("/wifi-status")) {
+    this->handle_wifi_status(req);
+    return;
+  }
+
+  if (url == ESPHOME_F("/")) {
+    auto *response = req->beginResponse(200, ESPHOME_F("text/html"), SCOOPY_INDEX);
+    response->addHeader(ESPHOME_F("Cache-Control"), ESPHOME_F("no-store"));
+    req->send(response);
+    return;
+  }
+
+#ifdef USE_ESP32
+  // Captive-network probes arrive with paths such as /connecttest.txt,
+  // /generate_204 and /hotspot-detect.html. Redirect them to the AP itself
+  // instead of serving HTML at the probe URL; this lets Windows, Android,
+  // Apple devices and browsers recognise Scoopy as a captive network.
+  network::IPAddress ip = wifi::global_wifi_component->wifi_soft_ap_ip();
+  char ip_buf[network::IP_ADDRESS_BUFFER_SIZE];
+  ip.str_to(ip_buf);
+  std::string portal_url = "http://";
+  portal_url += ip_buf;
+  portal_url += "/";
+  req->redirect(portal_url);
+#else
+  // Scoopy currently targets ESP32-C3. Keep the previous fallback for other
+  // platforms so this local component remains buildable if reused.
   auto *response = req->beginResponse(200, ESPHOME_F("text/html"), SCOOPY_INDEX);
   response->addHeader(ESPHOME_F("Cache-Control"), ESPHOME_F("no-store"));
   req->send(response);
+#endif
 }
 
 CaptivePortal::CaptivePortal(web_server_base::WebServerBase *base) : base_(base) {
