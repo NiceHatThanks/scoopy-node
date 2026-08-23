@@ -1,3 +1,5 @@
+"""Regression contract for Scoopy's first-time Wi-Fi captive portal."""
+
 from pathlib import Path
 import re
 import unittest
