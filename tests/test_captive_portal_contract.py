@@ -42,6 +42,12 @@ class CaptivePortalContractTests(unittest.TestCase):
             self.assertIn("impressively quick reader", frontend)
             self.assertIn("Scoopy is having a little think", frontend)
 
+    def test_setup_ui_has_clear_success_confirmation(self):
+        for frontend in (SOURCE_HTML, EMBEDDED):
+            self.assertIn("status.success", frontend)
+            self.assertIn("Connected", frontend)
+            self.assertIn("You can close this page now", frontend)
+
 
 if __name__ == "__main__":
     unittest.main()
