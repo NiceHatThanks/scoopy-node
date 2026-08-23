@@ -413,6 +413,7 @@
     const localPreview = window.location.protocol === 'file:';
     const connectionTimeoutMs = 30000;
     const statusPollMs = 1000;
+    const connectingMessage = "Scoopy is connecting to Wi-Fi. This page should close automatically. If it doesn't, you can close it once the Scoopy setup network disappears. Hopefully you won't need to read any of this because the page has already vanished by now. If you're still here, either you're an impressively quick reader, your Wi-Fi is taking its sweet time, Scoopy is having a little think, or I've made a mistake somewhere. Give it another moment, and if the Scoopy setup network disappears then everything has probably worked exactly as intended.";
 
     const mockConfig = {
       name: 'scoopy-2176d8',
@@ -571,6 +572,7 @@
           throw new Error('Wi-Fi settings were not accepted');
         }
 
+        showStatus(connectingMessage);
         const outcome = await waitForWifiConnection();
 
         if (outcome === 'timeout') {
