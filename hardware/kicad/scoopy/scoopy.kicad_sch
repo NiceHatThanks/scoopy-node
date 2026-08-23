@@ -2161,6 +2161,16 @@
 		)
 		(uuid "1e34c8ef-d3bd-45f6-bc4d-94f4ee2ebb9a")
 	)
+	(text "3v3 gnd\nYellow to RX2. Green to TX2. "
+		(exclude_from_sim no)
+		(at 60.706 94.996 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "4796bba0-97fb-4f31-9030-dd21fb31648d")
+	)
 	(text "GPIO20 = U0RXD - UART receive\nGPIO21 = U0TXD - UART transmit\nEverything else is fair game"
 		(exclude_from_sim no)
 		(at 59.436 38.608 0)
@@ -3429,7 +3439,7 @@
 				)
 			)
 		)
-		(property "MPN" "TL3305CF260QG"
+		(property "MPN" "C879462"
 			(at 101.6 33.02 0)
 			(hide yes)
 			(show_name no)
@@ -3586,7 +3596,7 @@
 				)
 			)
 		)
-		(property "MPN" "TL3305CF260QG"
+		(property "MPN" "C879462"
 			(at 101.6 27.94 0)
 			(hide yes)
 			(show_name no)
@@ -3987,7 +3997,7 @@
 				)
 			)
 		)
-		(property "MPN" "MP008288"
+		(property "MPN" "C19171390"
 			(at 111.76 59.69 0)
 			(hide yes)
 			(show_name no)
@@ -4155,7 +4165,7 @@
 				)
 			)
 		)
-		(property "MPN" "MP008288"
+		(property "MPN" "C22371297"
 			(at 111.76 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -4508,7 +4518,7 @@
 				)
 			)
 		)
-		(property "MPN" "CR0603-FX-1001ELF"
+		(property "MPN" "C2907002"
 			(at 100.33 59.69 90)
 			(hide yes)
 			(show_name no)
@@ -4676,7 +4686,7 @@
 				)
 			)
 		)
-		(property "MPN" "MP008277"
+		(property "MPN" "C22371297"
 			(at 111.76 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -4833,7 +4843,7 @@
 				)
 			)
 		)
-		(property "MPN" "CR0603-FX-1001ELF"
+		(property "MPN" "C2907002"
 			(at 100.33 44.45 90)
 			(hide yes)
 			(show_name no)
@@ -5067,7 +5077,7 @@
 				)
 			)
 		)
-		(property "MPN" "CR0603-FX-1001ELF"
+		(property "MPN" "C2907002"
 			(at 100.33 53.34 90)
 			(hide yes)
 			(show_name no)

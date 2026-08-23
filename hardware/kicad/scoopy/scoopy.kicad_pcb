@@ -141,7 +141,7 @@
 				)
 			)
 		)
-		(property "MPN" "TL3305CF260QG"
+		(property "MPN" "C879462"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1095,7 +1095,7 @@
 				)
 			)
 		)
-		(property "MPN" "MP008277"
+		(property "MPN" "C22371297"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1396,7 +1396,7 @@
 				)
 			)
 		)
-		(property "MPN" "MP008288"
+		(property "MPN" "C22371297"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1684,7 +1684,7 @@
 				)
 			)
 		)
-		(property "MPN" "CR0603-FX-1001ELF"
+		(property "MPN" "C2907002"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1934,7 +1934,7 @@
 				)
 			)
 		)
-		(property "MPN" "MP008288"
+		(property "MPN" "C19171390"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2333,7 +2333,7 @@
 				)
 			)
 		)
-		(property "MPN" "TL3305CF260QG"
+		(property "MPN" "C879462"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2876,7 +2876,7 @@
 				)
 			)
 		)
-		(property "MPN" "CR0603-FX-1001ELF"
+		(property "MPN" "C2907002"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3404,7 +3404,7 @@
 				)
 			)
 		)
-		(property "MPN" "CR0603-FX-1001ELF"
+		(property "MPN" "C2907002"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
