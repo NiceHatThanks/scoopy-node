@@ -7,6 +7,7 @@
 
 using namespace chip::app::Clusters;
 using namespace esp_matter;
+using namespace esp_matter::endpoint;
 
 namespace scoopy::matter {
 namespace {
