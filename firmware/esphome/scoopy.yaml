@@ -4,8 +4,8 @@
 #
 # Hardware:
 #
-#   GPIO0  - LD2410C UART TX
-#   GPIO1  - LD2410C UART RX
+#   GPIO0  - LD2410C TX to UART RX
+#   GPIO1  - LD2410C RX to UART TX
 #   GPIO2  - Button 1
 #   GPIO3  - Button 2
 #   GPIO4  - Left green LED
@@ -160,8 +160,8 @@ improv_serial:
 
 uart:
   id: radar_uart
-  tx_pin: GPIO0
-  rx_pin: GPIO1
+  tx_pin: GPIO1
+  rx_pin: GPIO0
   baud_rate: 256000
   parity: NONE
   stop_bits: 1
