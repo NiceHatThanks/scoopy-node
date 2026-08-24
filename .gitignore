@@ -107,3 +107,6 @@ firmware/releases/
 fabrication-toolkit-options.json
 hardware/kicad/scoopy/Fabrication output/
 hardware/kicad/scoopy/production/
+
+tests/
+factoryTest.yaml
