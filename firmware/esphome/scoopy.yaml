@@ -60,7 +60,7 @@ esphome:
   # Scoopy firmware release installed on the device.
   project:
     name: "nicehatthanks.scoopy"
-    version: "0.1.1"
+    version: "0.1.3"
 
   # Start the red setup pulse once components have initialised.
   # If Wi-Fi is already connected, leave the LEDs off.
@@ -403,6 +403,22 @@ light:
     default_transition_length: 0s
     gamma_correct: 1.0
 
+    # LED ownership rule:
+    # the coordinated LED Pattern entity and the three individual
+    # LED entities are mutually exclusive. As soon as a coordinated
+    # pattern is turned on, stop all individual LED states/effects
+    # before the pattern takes control of the raw PWM outputs.
+    on_turn_on:
+      - light.turn_off:
+          id: left_led
+          transition_length: 0s
+      - light.turn_off:
+          id: middle_led
+          transition_length: 0s
+      - light.turn_off:
+          id: right_led
+          transition_length: 0s
+
     effects:
       - lambda:
           name: "Circular Pulse"
@@ -665,6 +681,20 @@ light:
     output: left_led_output
     restore_mode: ALWAYS_OFF
 
+    # If an individual LED is turned on while a coordinated pattern
+    # is active, stop the pattern first. Turning LED Pattern off drives
+    # all three raw PWM outputs to 0 immediately, then this individual
+    # light/effect can take ownership cleanly.
+    on_turn_on:
+      - if:
+          condition:
+            lambda: |-
+              return id(led_pattern).remote_values.is_on();
+          then:
+            - light.turn_off:
+                id: led_pattern
+                transition_length: 0s
+
     effects:
       - pulse:
           name: "Pulse Dim"
@@ -737,6 +767,20 @@ light:
     output: middle_led_output
     restore_mode: ALWAYS_OFF
 
+    # If an individual LED is turned on while a coordinated pattern
+    # is active, stop the pattern first. Turning LED Pattern off drives
+    # all three raw PWM outputs to 0 immediately, then this individual
+    # light/effect can take ownership cleanly.
+    on_turn_on:
+      - if:
+          condition:
+            lambda: |-
+              return id(led_pattern).remote_values.is_on();
+          then:
+            - light.turn_off:
+                id: led_pattern
+                transition_length: 0s
+
     effects:
       - pulse:
           name: "Pulse Dim"
@@ -805,6 +849,20 @@ light:
     id: right_led
     output: right_led_output
     restore_mode: ALWAYS_OFF
+
+    # If an individual LED is turned on while a coordinated pattern
+    # is active, stop the pattern first. Turning LED Pattern off drives
+    # all three raw PWM outputs to 0 immediately, then this individual
+    # light/effect can take ownership cleanly.
+    on_turn_on:
+      - if:
+          condition:
+            lambda: |-
+              return id(led_pattern).remote_values.is_on();
+          then:
+            - light.turn_off:
+                id: led_pattern
+                transition_length: 0s
 
     effects:
       - pulse:
