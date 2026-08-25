@@ -46,4 +46,8 @@ Scoopy will then recreate its `scoopy-XXXXXX` setup network so Wi-Fi can be conf
 
 The two buttons and three LEDs are exposed through ESPHome so they can be used in Home Assistant automations, scripts, and dashboards. Presence models also expose LD2410C presence information.
 
+Next, open [`examples.md`](examples.md) for copy-ready automations covering buttons, lighting, presence, LEDs, alarm reminders, fans and blinds.
+
+If you prefer an interactive version that can fill your entity IDs into the examples automatically, use **https://nicehatthanks.com/docs/**.
+
 The current firmware is still under V1 validation, so entity names and setup behaviour may change before the first formal release.
