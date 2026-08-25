@@ -26,6 +26,7 @@ firmware/
 
 docs/
   setup.md           First-time setup and Home Assistant pairing
+  examples.md        Ready-made Home Assistant automations
   assembly.md        Hardware and enclosure assembly notes
   troubleshooting.md Common setup and hardware issues
 ```
@@ -50,6 +51,48 @@ Current firmware features include:
 - Wi-Fi recovery by holding both buttons for 10 seconds
 
 The same firmware also runs on Scoopy Compact. If the LD2410C is not fitted, the rest of Scoopy continues to operate normally.
+
+## Home Assistant examples
+
+Ready-made automations are in [`docs/examples.md`](docs/examples.md).
+
+Before copying an example, find the Entity ID Home Assistant is actually using for your Scoopy:
+
+1. Open **Settings → Devices & services**.
+2. Open your **Scoopy** device.
+3. Open one of its entities, such as **Button 1**.
+4. Select the **cog/settings icon**.
+5. Copy the full **Entity ID**.
+
+For example, Home Assistant might show:
+
+```text
+event.study_scoopy_test_button_1
+```
+
+The useful Scoopy part is:
+
+```text
+study_scoopy_test
+```
+
+Home Assistant may include the assigned **area name** in generated entity IDs. A device called `scoopy_test` assigned to the Study can therefore become `study_scoopy_test`. That is normal.
+
+In the GitHub examples, replace `scoopy_xxxxxx` with that shared Scoopy part. For example:
+
+```yaml
+entity_id: event.scoopy_xxxxxx_button_1
+```
+
+becomes:
+
+```yaml
+entity_id: event.study_scoopy_test_button_1
+```
+
+The same prefix is used for the Scoopy buttons, LEDs, LED Pattern and presence entities.
+
+For the easiest version, use the interactive examples at **https://nicehatthanks.com/docs/**. Paste any Scoopy entity ID there and the page fills the matching Scoopy name into every example automatically.
 
 ## Status
 
@@ -90,6 +133,8 @@ See [`LICENSE`](LICENSE) for the full terms.
 ## Documentation
 
 Start with [`docs/setup.md`](docs/setup.md) for first-time setup.
+
+Then see [`docs/examples.md`](docs/examples.md) for copy-ready Home Assistant automations.
 
 For hardware files, see [`hardware/README.md`](hardware/README.md). For printable enclosure files, see [`enclosure/README.md`](enclosure/README.md). Firmware details are in [`firmware/esphome/README.md`](firmware/esphome/README.md).
 
