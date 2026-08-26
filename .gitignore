@@ -94,3 +94,19 @@ firmware/tools/
 
 # Local compiled firmware releases
 firmware/releases/
+
+# ============================================================
+# Manufacturing / JLCPCB outputs - local only
+# ============================================================
+
+# JLCPCB BOM / pick-and-place exports
+*JLC.csv
+*-pos.csv
+
+# KiCad Fabrication Toolkit settings/output
+fabrication-toolkit-options.json
+hardware/kicad/scoopy/Fabrication output/
+hardware/kicad/scoopy/production/
+tools/*
+tests/
+factoryTest.yaml
