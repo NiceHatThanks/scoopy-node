@@ -111,6 +111,95 @@ logger:
 
 api:
 
+  # The ESP32-C3 is single-core, so Wi-Fi and BLE scanning
+  # share CPU/radio time. Only run BLE scanning while a
+  # Home Assistant state-subscribing API client is connected
+  # and the customer has enabled the Bluetooth Proxy switch.
+  on_client_connected:
+    - if:
+        condition:
+          and:
+            - switch.is_on: bluetooth_proxy_enabled
+            # on_client_connected fires before Home Assistant has
+            # necessarily subscribed to entity states, so identify
+            # the HA client directly rather than racing that subscription.
+            - lambda: |-
+                return client_info.rfind("Home Assistant", 0) == 0;
+        then:
+          - esp32_ble_tracker.start_scan:
+              continuous: true
+
+  # This trigger also fires for short-lived clients such as the
+  # ESPHome log viewer. Only stop scanning when no Home Assistant
+  # state-subscribing API client remains connected.
+  on_client_disconnected:
+    - if:
+        condition:
+          not:
+            api.connected:
+              state_subscription_only: true
+        then:
+          - esp32_ble_tracker.stop_scan:
+
+
+# ============================================================
+# Bluetooth LE / Home Assistant Bluetooth Proxy
+# ============================================================
+
+# Use passive BLE scanning to minimise Wi-Fi/BLE contention on the
+# single-core ESP32-C3.
+#
+# Continuous scanning is disabled at component startup so BLE does
+# not compete with Wi-Fi while Scoopy is booting or being provisioned.
+# The Home Assistant switch below starts a continuous passive scan
+# only while Home Assistant is connected. Default ESPHome scan
+# interval/window values are deliberately retained for Wi-Fi stability.
+esp32_ble_tracker:
+  scan_parameters:
+    active: false
+    continuous: false
+
+
+# Forward nearby BLE devices to Home Assistant.
+#
+# active: true allows Home Assistant integrations to create proxied
+# BLE/GATT connections through Scoopy when required, while scanning
+# itself remains passive.
+#
+# A single connection slot keeps RAM and radio overhead modest on the
+# ESP32-C3 while still allowing devices such as LD2410 BLE sensors to
+# be connected to and exposed normally in Home Assistant.
+bluetooth_proxy:
+  active: true
+  connection_slots: 1
+
+# Customer-facing control for BLE scanning.
+#
+# The preference is stored in flash. A new Scoopy defaults to OFF,
+# preserving the existing Wi-Fi/CPU behaviour until the customer opts in.
+# If Home Assistant disconnects, scanning stops automatically but this
+# switch remains ON, so scanning resumes when Home Assistant reconnects.
+switch:
+  - platform: template
+    name: "Bluetooth Proxy"
+    id: bluetooth_proxy_enabled
+    icon: "mdi:bluetooth"
+    entity_category: config
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+    turn_on_action:
+      - if:
+          condition:
+            api.connected:
+              state_subscription_only: true
+          then:
+            - esp32_ble_tracker.start_scan:
+                continuous: true
+
+    turn_off_action:
+      - esp32_ble_tracker.stop_scan:
+
 
 # Allows Scoopy to download firmware and update manifests
 # directly from the Nice Hat Thanks website.
