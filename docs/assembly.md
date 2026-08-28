@@ -2,6 +2,8 @@
 
 Assembly is the same for **Scoopy** and **Scoopy Compact**. The Presence version simply has the LD2410C fitted to the PCBA.
 
+If you are printing your own enclosure, use the versioned STL exports in [`../enclosure/`](../enclosure/) or the maintained [Scoopy MakerWorld project](https://makerworld.com/en/models/3231250-scoopy-home-assistant-esphome-room-controller#profileId-3659818) for the Bambu Studio / 3MF profile.
+
 ## What you need
 
 - 1 × M2 brass heat-set insert
