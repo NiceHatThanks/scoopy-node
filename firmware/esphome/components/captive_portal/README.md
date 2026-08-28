@@ -1,6 +1,6 @@
 # Scoopy captive portal override
 
-This local ESPHome component keeps ESPHome's captive-portal backend and replaces only the customer-facing setup page.
+This local ESPHome component keeps ESPHome's captive-portal backend and replaces the customer-facing setup page with the Scoopy-branded UI.
 
 Upstream base: ESPHome 2026.7.4 `esphome/components/captive_portal`.
 
@@ -14,8 +14,14 @@ Preserved from upstream:
 
 Scoopy-specific change:
 
-- all normal captive-portal page requests serve the Scoopy-branded frontend from `scoopy_index.h`
+- normal captive-portal page requests serve the Scoopy-branded frontend embedded in `scoopy_index.h`
 
-The human-editable browser prototype is `firmware/captive-portal/index.html`. Keep the embedded copy in `scoopy_index.h` in sync when changing the UI.
+The human-editable browser source is `firmware/captive-portal/index.html`. Keep the embedded copy in `scoopy_index.h` in sync when changing the UI.
 
-During hardware validation use `firmware/esphome/scoopy-onboarding.yaml`. The production `scoopy.yaml` remains untouched until the branded portal has passed the full fresh-device and factory-reset onboarding test.
+The production `firmware/esphome/scoopy.yaml` uses this component directly. The V1 onboarding and 10-second factory-reset/reprovisioning flows have been validated on hardware and form part of the `v1.0.0` baseline.
+
+## Third-party licensing
+
+This directory contains code derived from ESPHome's captive-portal implementation. Those upstream-derived portions retain the applicable ESPHome licence terms and are not relicensed by the Scoopy source-available licence.
+
+See [`THIRD_PARTY_NOTICE.md`](THIRD_PARTY_NOTICE.md) for the attribution and licensing details.
