@@ -153,10 +153,8 @@ The I²C connection is intended for user expansion, so any additional ESPHome co
 ## USB-C fit or enclosure alignment
 
 If the enclosure does not close cleanly:
-
-- Do not force the two halves together.
-- Make sure the USB-C connector is correctly seated through the opening in the base before tightening the PCB screw.
 - Check that the two printed buttons are seated correctly in the lid.
+- Make sure the USB-C connector is correctly seated through the opening in the base before tightening the PCB screw.
 - Confirm the three lid light pipes line up with the three PCB LEDs before clipping the base into the lid.
 - Check that the heat-set insert is straight and the M2 screw is not pulling the PCB out of position.
 
