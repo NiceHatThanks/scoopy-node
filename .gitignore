@@ -110,3 +110,4 @@ hardware/kicad/scoopy/production/
 tools/*
 tests/
 factoryTest.yaml
+*.3mf
