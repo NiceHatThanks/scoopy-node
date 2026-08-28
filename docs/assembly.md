@@ -12,7 +12,7 @@ Assembly is the same for **Scoopy** and **Scoopy Compact**. The Presence version
 - 1 × Scoopy lid
 - 2 × Scoopy buttons
 
-![Scoopy assembly components](../enclosure/build/1-components.jpg)
+<img src="../enclosure/build/1-components.jpg" alt="Scoopy assembly components" width="600">
 
 ## 1. Fit the brass insert
 
@@ -26,13 +26,13 @@ Secure the PCBA by threading the M2 × 6 mm screw into the brass insert.
 
 > **Scoopy Presence:** use a nylon screw where possible. A metal screw close to the LD2410C may affect the radar.
 
-![Scoopy PCBA fitted into the base](../enclosure/build/2-pcbInBase.jpg)
+<img src="../enclosure/build/2-pcbInBase.jpg" alt="Scoopy PCBA fitted into the base" width="600">
 
 ## 3. Fit the buttons
 
 Place both Scoopy buttons into the lid in their openings.
 
-![Scoopy buttons fitted into the lid](../enclosure/build/3-buttonsInLid.jpg)
+<img src="../enclosure/build/3-buttonsInLid.jpg" alt="Scoopy buttons fitted into the lid" width="600">
 
 ## 4. Close Scoopy
 
@@ -44,7 +44,7 @@ Check the orientation before pushing the two halves together: the lid's three li
 
 That's it — Scoopy is assembled.
 
-![Completed Scoopy](../enclosure/build/done.jpg)
+<img src="../enclosure/build/done.jpg" alt="Completed Scoopy" width="600">
 
 ## Set up Scoopy
 
