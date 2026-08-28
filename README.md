@@ -1,12 +1,26 @@
 # Scoopy Node
 
-Tiny, local-first smart-home hardware for Home Assistant and ESPHome.
+Tiny, local-first room hardware for Home Assistant and ESPHome.
 
-Scoopy Node is a compact USB-C powered room interface built around an ESP32-C3. The current hardware combines two physical buttons, three status LEDs, LD2410C mmWave presence sensing, and an I²C expansion connection in a small 3D-printed enclosure.
+Scoopy is a compact USB-C powered room controller built around an ESP32-C3. V1 combines two physical buttons, three PWM LEDs, optional LD2410C mmWave presence sensing, optional Home Assistant Bluetooth Proxy support, and an I²C expansion connection in a small 3D-printed enclosure.
 
-Scoopy Compact uses the same core hardware and firmware without the mmWave presence sensor for rooms where presence sensing is not needed.
+There are two enclosure variants:
 
-This repository contains the source-available hardware files, printable enclosure files, ESPHome firmware, captive-portal UI, manufacturing outputs, and project documentation.
+- **Scoopy Presence** — the full-size enclosure with an LD2410C mmWave presence sensor.
+- **Scoopy Compact** — the smaller enclosure without the radar.
+
+Both variants use the same firmware image. If an LD2410C is not fitted, the rest of Scoopy continues to work normally.
+
+This repository contains the source-available hardware files, versioned STL enclosure exports, ESPHome firmware, captive-portal UI, manufacturing outputs, and project documentation.
+
+## Quick links
+
+- Website and product information: https://nicehatthanks.com
+- First-time setup: https://nicehatthanks.com/setup/
+- Interactive Home Assistant docs and examples: https://nicehatthanks.com/docs/
+- Assembly guide: [`docs/assembly.md`](docs/assembly.md)
+- Troubleshooting: [`docs/troubleshooting.md`](docs/troubleshooting.md)
+- Bambu Studio / 3MF project: [Scoopy on MakerWorld](https://makerworld.com/en/models/3231250-scoopy-home-assistant-esphome-room-controller#profileId-3659818)
 
 ## Repository structure
 
@@ -17,8 +31,9 @@ hardware/
   bom/               Bill of materials and manufacturing exports
 
 enclosure/
-  compact/           Printable files for Scoopy Compact
-  presence/          Printable files for Scoopy with mmWave presence
+  compact/           Versioned STL exports for Scoopy Compact
+  presence/          Versioned STL exports for Scoopy Presence
+  build/             Assembly photos used by the build guide
 
 firmware/
   esphome/           Unified ESPHome configuration and custom components
@@ -27,120 +42,114 @@ firmware/
 docs/
   setup.md           First-time setup and Home Assistant pairing
   examples.md        Ready-made Home Assistant automations
-  assembly.md        Hardware and enclosure assembly notes
-  troubleshooting.md Common setup and hardware issues
+  assembly.md        V1 enclosure assembly guide
+  troubleshooting.md Common setup, firmware and hardware issues
 ```
 
-Each enclosure variant contains versioned STL exports. Slicer-ready 3MF projects are intentionally not maintained in this repository; when available, Bambu Studio projects and profiles will be published through Bambu MakerWorld so there is a single maintained copy.
+## Firmware
 
-## Current firmware
+`firmware/esphome/scoopy.yaml` is the unified production configuration for both Scoopy variants. The V1 firmware identifies itself as `1.0.0` through the ESPHome project version.
 
-`firmware/esphome/scoopy.yaml` is designed to run on both Scoopy and Scoopy Compact using the same firmware image.
+V1 features include:
 
-Current firmware features include:
-
-- Unique `scoopy-XXXXXX` device naming using the ESP32 MAC address
-- Wi-Fi provisioning through a Scoopy-branded captive portal
-- ESPHome native API for Home Assistant
-- OTA firmware updates
+- Unique `scoopy-XXXXXX` naming using the ESP32 MAC address
+- Scoopy-branded local Wi-Fi provisioning with a captive portal
+- ESPHome native API and Home Assistant discovery
+- Two physical buttons exposed as `single`, `double`, and `hold` event entities
+- Three individually dimmable PWM LED entities
+- Individual pulse, flash, and alert LED effects
+- Coordinated three-LED patterns including Circular Pulse, Comet, Breathe All, Heartbeat, Ping Pong, and Ripple
+- Pulsing red Wi-Fi/setup indication and a brief green confirmation after connection
+- LD2410C presence, moving-target, and still-target entities when the radar is fitted
+- Optional Home Assistant Bluetooth Proxy, disabled by default
+- Passive BLE scanning with one active proxy connection slot
+- Website-hosted firmware updates through the Home Assistant **Firmware Update** entity
+- Native ESPHome OTA support for local/development updates
 - USB serial provisioning through Improv
-- Two button inputs
-- Three controllable status LEDs
-- LD2410C mmWave presence sensing when the radar is fitted
-- I²C expansion bus
-- Wi-Fi recovery by holding both buttons for 10 seconds
+- Wi-Fi signal, Wi-Fi percentage, IP address, uptime, ESPHome version, and Scoopy firmware diagnostics
+- I²C expansion on GPIO5 (SDA) and GPIO7 (SCL)
+- Physical Wi-Fi/factory recovery by holding both buttons for 10 seconds
 
-The same firmware also runs on Scoopy Compact. If the LD2410C is not fitted, the rest of Scoopy continues to operate normally.
+The firmware deliberately uses one image for both variants. On Scoopy Compact, LD2410C entities may show as unavailable or Unknown because the radar is not fitted; this does not affect buttons, LEDs, Wi-Fi, OTA, Bluetooth Proxy, or the rest of the device.
 
-## Home Assistant examples
+## Home Assistant
 
-Ready-made automations are in [`docs/examples.md`](docs/examples.md).
+Once Scoopy has joined the same network as Home Assistant, ESPHome discovery should find it automatically.
 
-Before copying an example, find the Entity ID Home Assistant is actually using for your Scoopy:
+Ready-made automations are in [`docs/examples.md`](docs/examples.md). The examples cover:
 
-1. Open **Settings → Devices & services**.
-2. Open your **Scoopy** device.
-3. Open one of its entities, such as **Button 1**.
-4. Select the **cog/settings icon**.
-5. Copy the full **Entity ID**.
+- LED pattern control
+- Button-controlled lighting
+- Presence-controlled lighting
+- Time-aware lighting
+- Alarm reminders
+- Status LEDs
+- Multi-function room controls for lights, fans, and blinds
 
-For example, Home Assistant might show:
+The interactive version at https://nicehatthanks.com/docs/ can take one of your Scoopy Entity IDs and fill the matching Scoopy prefix into the examples automatically.
 
-```text
-event.study_scoopy_test_button_1
-```
+## Setup and recovery
 
-The useful Scoopy part is:
+For normal first-time setup, use https://nicehatthanks.com/setup/ or [`docs/setup.md`](docs/setup.md).
 
-```text
-study_scoopy_test
-```
+A fresh or factory-reset Scoopy creates a Wi-Fi network named `scoopy-XXXXXX` with password `scoopy123`. Wi-Fi credentials are sent directly to Scoopy through its local setup page; no Scoopy cloud account is involved.
 
-Home Assistant may include the assigned **area name** in generated entity IDs. A device called `scoopy_test` assigned to the Study can therefore become `study_scoopy_test`. That is normal.
+To clear saved Wi-Fi credentials and return to setup mode, hold both physical buttons together for 10 seconds. The middle red LED flashes rapidly near the end of the hold before the reset is performed.
 
-In the GitHub examples, replace `scoopy_xxxxxx` with that shared Scoopy part. For example:
+## Firmware updates
 
-```yaml
-entity_id: event.scoopy_xxxxxx_button_1
-```
+Released firmware can be installed directly from Home Assistant through Scoopy's **Firmware Update** entity. Scoopy reads the update manifest hosted at:
 
-becomes:
+`https://nicehatthanks.com/firmware/scoopy/manifest.json`
 
-```yaml
-entity_id: event.study_scoopy_test_button_1
-```
+An OTA update preserves the device identity, saved Wi-Fi credentials, Home Assistant connection, and existing entity IDs.
 
-The same prefix is used for the Scoopy buttons, LEDs, LED Pattern and presence entities.
+## Enclosure and printing
 
-For the easiest version, use the interactive examples at **https://nicehatthanks.com/docs/**. Paste any Scoopy entity ID there and the page fills the matching Scoopy name into every example automatically.
+GitHub contains the versioned raw STL exports for Scoopy Compact and Scoopy Presence.
 
-## Status
+The slicer-ready Bambu Studio / 3MF project is intentionally **not** duplicated in this repository. MakerWorld is the single maintained source for the Bambu project and print profile:
 
-`v1.0.0` is the first formal Scoopy release. The V1 hardware, unified firmware, enclosure STL exports, and manufacturing files in that release tag form the reproducible V1 baseline. Development on `main` may move ahead of that baseline after release.
+**[Scoopy on MakerWorld](https://makerworld.com/en/models/3231250-scoopy-home-assistant-esphome-room-controller#profileId-3659818)**
 
-## Design goals
-
-- Small enough to place around the home without becoming visual clutter
-- Local-first operation with Home Assistant and ESPHome
-- Simple USB-C power with no batteries to replace
-- Useful physical controls and visible feedback
-- mmWave room presence sensing in the standard Scoopy enclosure
-- A smaller Compact version for rooms where presence sensing is not needed
-- Source files that are practical to inspect, modify, and reproduce for personal projects
+See [`enclosure/README.md`](enclosure/README.md) for the STL layout and [`docs/assembly.md`](docs/assembly.md) for assembly.
 
 ## Hardware overview
 
-Current V1 Scoopy hardware includes:
+V1 uses a 28 × 28 mm carrier PCBA with:
 
-- ESP32-C3
+- ESP32-C3 Super Mini
 - 2 × tactile buttons
-- 3 × configurable LEDs
-- HLK-LD2410C mmWave presence sensor
-- I²C expansion header
-- USB-C power
-- 3D-printed enclosure
+- 3 × LEDs with 2.2 kΩ series resistors
+- Optional HLK-LD2410C mmWave presence sensor
+- I²C expansion connection
+- USB-C power through the ESP32-C3 module
 
-Scoopy Compact omits the LD2410C and uses the smaller enclosure.
+Scoopy Presence uses the LD2410C and the larger enclosure. Scoopy Compact uses the same carrier and firmware without the radar.
+
+Electrical design and manufacturing files are documented in [`hardware/README.md`](hardware/README.md).
+
+## Assembly
+
+The enclosure build is the same basic process for Compact and Presence: fit the heat-set insert, secure the PCBA, place the two buttons in the lid, then clip the base and lid together while aligning the three light pipes with the LEDs.
+
+For Scoopy Presence, a nylon M2 screw is recommended near the LD2410C because a metal screw may affect the radar.
+
+See the illustrated [`docs/assembly.md`](docs/assembly.md) guide.
+
+## Release status
+
+`v1.0.0` is the first formal Scoopy release. The V1 hardware, firmware, STL exports, documentation, and manufacturing files in that release tag form the reproducible V1 baseline.
+
+Development on `main` may move ahead after the release. Use a release tag when reproducing a known version.
 
 ## Build your own
 
-The hardware, firmware, and printable files are available so you can inspect Scoopy, build one for yourself, modify it, and experiment with your own non-commercial versions.
+The hardware, firmware, and printable STL files are available so you can inspect Scoopy, build one for yourself, modify it, and experiment with your own non-commercial versions.
 
 Commercial manufacture or sale requires prior permission from Nice Hat Thanks.
 
 See [`LICENSE`](LICENSE) for the full terms.
-
-## Documentation
-
-Start with [`docs/setup.md`](docs/setup.md) for first-time setup.
-
-Then see [`docs/examples.md`](docs/examples.md) for copy-ready Home Assistant automations.
-
-For hardware files, see [`hardware/README.md`](hardware/README.md). For printable enclosure files, see [`enclosure/README.md`](enclosure/README.md). Firmware details are in [`firmware/esphome/README.md`](firmware/esphome/README.md).
-
-## Website
-
-Project updates and product information: https://nicehatthanks.com
 
 ## Licence
 
