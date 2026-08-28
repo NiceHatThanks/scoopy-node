@@ -60,7 +60,7 @@ esphome:
   # Scoopy firmware release installed on the device.
   project:
     name: "nicehatthanks.scoopy"
-    version: "0.1.5"
+    version: "1.0.0"
 
   # Start the red setup pulse once components have initialised.
   # If Wi-Fi is already connected, leave the LEDs off.

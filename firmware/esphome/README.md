@@ -62,7 +62,7 @@ The production configuration intentionally does not contain a home Wi-Fi SSID or
 
 From an ESPHome environment, build or flash `scoopy.yaml` in the usual way. Local ESPHome build artefacts and secrets should remain untracked.
 
-Firmware is still under V1 validation, so behaviour and entity names may change before the first formal release.
+`v1.0.0` establishes the first formal Scoopy firmware baseline. Future released firmware should increment the Scoopy project version using semantic versioning, with the corresponding Git tag preserving the exact source used for that release.
 
 ## Licence
 

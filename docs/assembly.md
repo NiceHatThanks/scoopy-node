@@ -13,4 +13,4 @@ This document will cover assembly of the Scoopy Node PCB and enclosure.
 - USB-C clearance check
 - Final functional test
 
-Mechanical tolerances and print settings will be added once the V1 enclosure is validated with production boards.
+Further assembly detail can be added here as needed. Slicer-specific print settings will live with the Bambu profile when it is published rather than being duplicated in this repository.

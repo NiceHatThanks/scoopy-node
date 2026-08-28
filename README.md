@@ -31,7 +31,7 @@ docs/
   troubleshooting.md Common setup and hardware issues
 ```
 
-Each enclosure variant contains STL exports and a location for slicer-ready 3MF projects.
+Each enclosure variant contains versioned STL exports. Slicer-ready 3MF projects are intentionally not maintained in this repository; when available, Bambu Studio projects and profiles will be published through Bambu MakerWorld so there is a single maintained copy.
 
 ## Current firmware
 
@@ -96,7 +96,7 @@ For the easiest version, use the interactive examples at **https://nicehatthanks
 
 ## Status
 
-V1 is currently in development and validation. Hardware, firmware, enclosure files, documentation, and manufacturing outputs may change while testing continues.
+`v1.0.0` is the first formal Scoopy release. The V1 hardware, unified firmware, enclosure STL exports, and manufacturing files in that release tag form the reproducible V1 baseline. Development on `main` may move ahead of that baseline after release.
 
 ## Design goals
 

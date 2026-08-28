@@ -11,7 +11,7 @@ Electrical design and manufacturing files for Scoopy Node.
 
 The KiCad directory contains the editable design source. Generated fabrication outputs live separately so the project stays clean and manufacturing files are easy to identify.
 
-Exported schematic PDFs are not currently committed as a separate directory. The editable schematic is part of the KiCad project and release-specific documentation can be added as V1 is frozen.
+Exported schematic PDFs are not currently committed as a separate directory. The editable schematic is part of the KiCad project; release-specific exports can be added when useful.
 
 Third-party STEP/GLB models and standalone library components with redistribution restrictions are intentionally not included.
 
@@ -19,4 +19,4 @@ Third-party STEP/GLB models and standalone library components with redistributio
 
 Manufacturing outputs should remain grouped by hardware revision (`v1/`, `v2/`, and so on). Releases and Git tags can then identify the exact set of files used for a known hardware build.
 
-V1 is still under development and validation. Do not assume the latest files are production-frozen until a formal release/tag says so.
+`v1.0.0` identifies the first production-frozen V1 hardware baseline. Development on `main` may continue after that tag, so use a release/tag when reproducing a known hardware build.

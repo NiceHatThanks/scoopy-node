@@ -15,13 +15,13 @@ Each variant is organised the same way:
     v1/
       full/      complete enclosure STL export
       parts/     individual printable components
-  3mf/
-    v1/          slicer-ready project files when available
 ```
+
+Slicer-ready 3MF/Bambu Studio project files are intentionally not tracked in this repository. When available, they will be published through Bambu MakerWorld so there is one maintained copy rather than separate GitHub and Bambu versions.
 
 Fusion source files are intentionally not published. The public enclosure files are focused on making it straightforward to print a complete enclosure or replace individual parts.
 
-Keep printable exports grouped by enclosure revision so a known release can always be reproduced later.
+Keep printable STL exports grouped by enclosure revision so a known release can always be reproduced later.
 
 Suggested filenames:
 
@@ -32,7 +32,6 @@ scoopy-compact-v1-lid.stl
 scoopy-compact-v1-button-1.stl
 scoopy-compact-v1-button-2.stl
 scoopy-compact-v1-light-pipes.stl
-scoopy-compact-v1.3mf
 
 scoopy-presence-v1-complete.stl
 scoopy-presence-v1-base.stl
@@ -40,5 +39,4 @@ scoopy-presence-v1-lid.stl
 scoopy-presence-v1-button-1.stl
 scoopy-presence-v1-button-2.stl
 scoopy-presence-v1-light-pipes.stl
-scoopy-presence-v1.3mf
 ```
