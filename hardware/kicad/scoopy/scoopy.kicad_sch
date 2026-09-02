@@ -3263,6 +3263,17 @@
 				)
 			)
 		)
+		(property "MPN" "C19723500"
+			(at 19.05 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "a8109222-2429-4e7a-aa04-868bc1d3955e")
 		)
@@ -4508,7 +4519,7 @@
 				)
 			)
 		)
-		(property "MPN" "C2907002"
+		(property "MPN" "C2907005"
 			(at 100.33 59.69 90)
 			(hide yes)
 			(show_name no)
@@ -4833,7 +4844,7 @@
 				)
 			)
 		)
-		(property "MPN" "C2907002"
+		(property "MPN" "C2907005"
 			(at 100.33 44.45 90)
 			(hide yes)
 			(show_name no)
@@ -5067,7 +5078,7 @@
 				)
 			)
 		)
-		(property "MPN" "C2907002"
+		(property "MPN" "C2907005"
 			(at 100.33 53.34 90)
 			(hide yes)
 			(show_name no)

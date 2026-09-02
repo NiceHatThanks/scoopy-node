@@ -724,6 +724,19 @@
 				)
 			)
 		)
+		(property "MPN" "C19723500"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5ac0f2cb-44ac-41c3-b292-5f69a7dbdabb")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property ki_fp_filters "Connector*:*_1x??_*")
 		(path "/2360398a-c1cb-4e4e-b941-f0569dab9ee6")
 		(sheetname "/")
@@ -1684,7 +1697,7 @@
 				)
 			)
 		)
-		(property "MPN" "C2907002"
+		(property "MPN" "C2907005"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2876,7 +2889,7 @@
 				)
 			)
 		)
-		(property "MPN" "C2907002"
+		(property "MPN" "C2907005"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3404,7 +3417,7 @@
 				)
 			)
 		)
-		(property "MPN" "C2907002"
+		(property "MPN" "C2907005"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
